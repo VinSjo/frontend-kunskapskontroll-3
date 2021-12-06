@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script type="module" src="js/app.js"></script>
+    <title>Yahtzee</title>
+</head>
+
+<body>
+    <main>
+        <div class="app container">
+            <div class="dice container">
+
+            </div>
+        </div>
+    </main>
+    <template id="dice">
+        <svg class="icon dice" value="1" width="64" height="64"
+            viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect class="background" width="64" height="64" rx="8" />
+            <circle class="dot" cx="32" cy="32" r="6" />
+        </svg>
+        <svg class="icon dice" value="2" width="64" height="64"
+            viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect class="background" width="64" height="64" rx="8" />
+            <circle class="dot" cx="14" cy="50" r="6" />
+            <circle class="dot" cx="50" cy="14" r="6" />
+        </svg>
+        <svg class="icon dice" value="3" width="64" height="64"
+            viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect class="background" width="64" height="64" rx="8" />
+            <circle class="dot" cx="14" cy="50" r="6" />
+            <circle class="dot" cx="32" cy="32" r="6" />
+            <circle class="dot" cx="50" cy="14" r="6" />
+        </svg>
+        <svg class="icon dice" value="4" width="64" height="64"
+            viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect class="background" width="64" height="64" rx="8" />
+            <circle class="dot" cx="14" cy="14" r="6" />
+            <circle class="dot" cx="14" cy="50" r="6" />
+            <circle class="dot" cx="50" cy="14" r="6" />
+            <circle class="dot" cx="50" cy="50" r="6" />
+        </svg>
+        <svg class="icon dice" value="5" width="64" height="64"
+            viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect class="background" width="64" height="64" rx="8" />
+            <circle class="dot" cx="14" cy="14" r="6" />
+            <circle class="dot" cx="14" cy="50" r="6" />
+            <circle class="dot" cx="32" cy="32" r="6" />
+            <circle class="dot" cx="50" cy="14" r="6" />
+            <circle class="dot" cx="50" cy="50" r="6" />
+        </svg>
+        <svg class="icon dice" value="6" width="64" height="64"
+            viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect class="background" width="64" height="64" rx="8" />
+            <circle class="dot" cx="14" cy="14" r="6" />
+            <circle class="dot" cx="14" cy="32" r="6" />
+            <circle class="dot" cx="14" cy="50" r="6" />
+            <circle class="dot" cx="50" cy="14" r="6" />
+            <circle class="dot" cx="50" cy="32" r="6" />
+            <circle class="dot" cx="50" cy="50" r="6" />
+        </svg>
+    </template>
+</body>
+
+</html>
