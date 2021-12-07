@@ -1,4 +1,4 @@
-import DiceArray from "./dice/DiceArray.js";
+import { DiceArray } from "./dice/Dice.js";
 
 const game = {
 	dice: new DiceArray(5),
@@ -20,7 +20,7 @@ const game = {
 		});
 
 		this.dice.forEach(dice => {
-			dice.element.addEventListener("click", () => {
+			dice.addEventListener("click", () => {
 				if (this.dice.shuffling) return;
 				dice.disabled = !dice.disabled;
 				!this.dice.available.length
