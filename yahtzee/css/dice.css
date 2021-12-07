@@ -10,32 +10,35 @@
 .icon.dice {
 	height: 100%;
 	width: auto;
-	cursor: pointer;
-}
-
-.icon.dice.disabled {
-	cursor: not-allowed;
 }
 
 .icon.dice rect {
 	fill: black;
 }
 
-.icon.dice.disabled rect {
-	fill: red;
-}
-
 .icon.dice circle {
 	fill: white;
 }
 
-.icon.dice rect,
+.icon.dice,
 .icon.dice circle {
 	opacity: 0;
 	transition: opacity 0.15s ease-in-out;
 }
 
-.icon.dice rect.show,
+.icon.dice.show,
 .icon.dice circle.show {
 	opacity: 1;
+}
+
+.icon.dice.disabled rect {
+	fill: red;
+}
+
+.icon.dice.show:not(.disabled) {
+	cursor: pointer;
+}
+
+.icon.dice.disabled {
+	cursor: no-drop;
 }
