@@ -53,10 +53,10 @@ main {
 	width: auto;
 }
 
-.icon.dice .background {
+.icon.dice rect {
 	fill: black;
 }
 
-.icon.dice .dot {
+.icon.dice circle {
 	fill: white;
 }
