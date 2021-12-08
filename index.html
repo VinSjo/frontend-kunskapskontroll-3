@@ -4,14 +4,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Games lol</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/dice.css">
+    <script type="module" src="js/app.js"></script>
+    <title>Yatzy</title>
 </head>
 
 <body>
-    <ul>
-        <li><a href="/tictactoe/index.html">Tic-Tac-Toe</a></li>
-        <li><a href="/yatzy/index.html">Yatzy</a></li>
-    </ul>
+    <main>
+        <div class="app container">
+            <div class="dice container">
+
+            </div>
+            <button class="roll-button">Roll</button>
+            <div class="points container">
+                <table class="points">
+                    <tr>
+                        <th>Yatzy</th>
+                        <th>Max</th>
+                        <th>Points</th>
+                    </tr>
+                    <tr class="row" data-value="1">
+                        <td>1</td>
+                        <td>5</td>
+                        <td class="output">0</td>
+                    </tr>
+                    <tr class="row" data-value="2">
+                        <td>2</td>
+                        <td>10</td>
+                        <td class="output">0</td>
+                    </tr>
+                    <tr class="row" data-value="3">
+                        <td>3</td>
+                        <td>15</td>
+                        <td class="output">0</td>
+                    </tr>
+                    <tr class="row" data-value="4">
+                        <td>4</td>
+                        <td>20</td>
+                        <td class="output">0</td>
+                    </tr>
+                    <tr data-value="5">
+                        <td>5</td>
+                        <td>25</td>
+                        <td class="output">0</td>
+                    </tr>
+                    <tr data-value="6">
+                        <td>6</td>
+                        <td>30</td>
+                        <td class="output">0</td>
+                    </tr>
+                    <tr data-value="pair">
+                        <td>1 pair</td>
+                        <td>12</td>
+                        <td class="output">0</td>
+                    </tr>
+                    <tr data-value="twoPair">
+                        <td>2 pair</td>
+                        <td>22</td>
+                        <td class="output">0</td>
+                    </tr>
+                    <tr data-value="threeOfKind">
+                        <td>three of a kind</td>
+                        <td>18</td>
+                        <td class="output">0</td>
+                    </tr>
+                    <tr data-value="fourOfKind">
+                        <td>four of a kind</td>
+                        <td>24</td>
+                        <td class="output">0</td>
+                    </tr>
+                    <tr data-value="smallStraight">
+                        <td>small straight</td>
+                        <td>15</td>
+                        <td class="output">0</td>
+                    </tr>
+                    <tr data-value="largeStraight">
+                        <td>large straight</td>
+                        <td>20</td>
+                        <td class="output">0</td>
+                    </tr>
+                    <tr data-value="fullHouse">
+                        <td>full house</td>
+                        <td>28</td>
+                        <td class="output">0</td>
+                    </tr>
+                    <tr data-value="chance">
+                        <td>chance</td>
+                        <td>30</td>
+                        <td class="output">0</td>
+                    </tr>
+                    <tr data-value="yatzy">
+                        <td>yatzy</td>
+                        <td>50</td>
+                        <td class="output">0</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </main>
+    <template id="dice">
+        <svg class="icon dice" data-value="1" width="64" height="64"
+            viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1.5" y="1.5" width="61" height="61" rx="6.5"
+                stroke-width="3" />
+            <circle cx="14" cy="14" r="6" />
+            <circle cx="50" cy="14" r="6" />
+            <circle cx="14" cy="32" r="6" />
+            <circle cx="32" cy="32" r="6" />
+            <circle cx="50" cy="32" r="6" />
+            <circle cx="14" cy="50" r="6" />
+            <circle cx="50" cy="50" r="6" />
+        </svg>
+    </template>
 </body>
 
 </html>
