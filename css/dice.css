@@ -1,9 +1,10 @@
 :root {
 	--fill-color: white;
 	--stroke-color: black;
-	--disabled-highlight: red;
+	--locked-highlight: red;
 	--opacity-transition: opacity 0.1s ease;
 	--transform-transition: transform 0.2s ease-out;
+	--disabled-dice-transform: translateY(-25%);
 }
 
 .dice.container {
@@ -31,21 +32,20 @@
 .icon.dice circle {
 	opacity: 0;
 	fill: var(--stroke-color);
-	transition: var(--opacity-transition);
 }
 
-.icon.dice.disabled rect {
-	stroke: var(--disabled-highlight);
+.icon.dice.locked rect {
+	stroke: var(--locked-highlight);
 }
 
-.icon.dice.disabled circle {
-	fill: var(--disabled-highlight);
+.icon.dice.locked circle {
+	fill: var(--locked-highlight);
 }
 
-.icon.dice.disabled {
+.icon.dice.locked {
 	transform: translate(0, -25%);
 }
 
-.icon.dice:not(.disabled) {
+.icon.dice:not(.locked) {
 	cursor: pointer;
 }
