@@ -1,9 +1,6 @@
 import { ScoreCardTemplate } from "../modules/ScoreCard.js";
 import UI from "./ui.js";
-/**
- * @property {HTMLTableElement} table
- * @property {Player[]} players,
- */
+
 const SCOREBOARD = {
 	players: [],
 	show() {

@@ -35,18 +35,6 @@ class ScoreCardTemplate {
 		Object.defineProperties(this, {
 			upper: { value: upper, enumerable: true },
 			lower: { value: lower, enumerable: true },
-			values: {
-				get: function () {
-					const output = {};
-					for (const [sectionKey, section] of Object.entries(this)) {
-						output[sectionKey] = [];
-						for (const key of Object.keys(section)) {
-							output[sectionKey] = section[key].value;
-						}
-					}
-					return output;
-				},
-			},
 		});
 	}
 }
