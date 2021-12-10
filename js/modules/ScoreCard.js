@@ -8,40 +8,36 @@ import {
 	getYatzy,
 } from "./calculations.js";
 
-class ScoreCardTemplate {
+class ScoreCard {
 	constructor() {
-		const rowObject = (name, value = 0) => ({ name: name, value: value });
-
+		const newRow = (name, value = 0) => ({
+			name: name,
+			value: value,
+		});
 		const upper = {
-			1: rowObject("one"),
-			2: rowObject("two"),
-			3: rowObject("three"),
-			4: rowObject("four"),
-			5: rowObject("five"),
-			6: rowObject("six"),
+			1: newRow("one"),
+			2: newRow("two"),
+			3: newRow("three"),
+			4: newRow("four"),
+			5: newRow("five"),
+			6: newRow("six"),
 		};
 		const lower = {
-			bonus: rowObject("bonus"),
-			pair: rowObject("one pair"),
-			twoPair: rowObject("two pair"),
-			threeOfKind: rowObject("three of a kind"),
-			fourOfKind: rowObject("four of a kind"),
-			smallStraight: rowObject("small straight"),
-			largeStraight: rowObject("large straight"),
-			fullHouse: rowObject("full house"),
-			chance: rowObject("chance"),
-			yatzy: rowObject("yatzy"),
+			bonus: newRow("bonus"),
+			pair: newRow("one pair"),
+			twoPair: newRow("two pair"),
+			threeOfKind: newRow("three of a kind"),
+			fourOfKind: newRow("four of a kind"),
+			smallStraight: newRow("small straight"),
+			largeStraight: newRow("large straight"),
+			fullHouse: newRow("full house"),
+			chance: newRow("chance"),
+			yatzy: newRow("yatzy"),
 		};
 		Object.defineProperties(this, {
 			upper: { value: upper, enumerable: true },
 			lower: { value: lower, enumerable: true },
 		});
-	}
-}
-
-class ScoreCard extends ScoreCardTemplate {
-	constructor() {
-		super();
 	}
 	get upperSum() {
 		return this.reduceSection("upper");
@@ -73,10 +69,8 @@ class ScoreCard extends ScoreCardTemplate {
 		);
 	}
 	getDiceScore(diceValues, onlyAvailable = true) {
-		const score = new ScoreCardTemplate();
-
+		const score = new ScoreCard();
 		const occurrences = getOccurrences(diceValues);
-
 		for (const key of Object.keys(score.upper)) {
 			const number = parseInt(key);
 			const index = number - 1;
@@ -91,6 +85,7 @@ class ScoreCard extends ScoreCardTemplate {
 		score.lower.largeStraight.value = getStraight(diceValues, 2);
 
 		const pairs = getPairs(occurrences);
+
 		if (pairs.length > 0) {
 			score.lower.pair.value = Math.max(...pairs);
 			score.lower.threeOfKind.value = getThreeOfKind(occurrences);
@@ -116,4 +111,3 @@ class ScoreCard extends ScoreCardTemplate {
 	}
 }
 export default ScoreCard;
-export { ScoreCardTemplate };

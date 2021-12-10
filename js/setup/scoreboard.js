@@ -1,4 +1,4 @@
-import { ScoreCardTemplate } from "../modules/ScoreCard.js";
+import ScoreCard from "../modules/ScoreCard.js";
 import UI from "./ui.js";
 
 const SCOREBOARD = {
@@ -34,14 +34,17 @@ const SCOREBOARD = {
 					? "upper"
 					: "lower";
 				const key = row.getAttribute("data-key");
+
 				cell.textContent = player.score[section][key].value;
 			});
 		});
 	},
 	init() {
 		if (!this.players.length) return;
+
 		const playerNameRow =
 			UI.scoreBoard.table.querySelector("thead.players tr");
+
 		this.players.forEach(player => {
 			const th = document.createElement("th");
 			th.textContent = player.name;
@@ -57,7 +60,7 @@ const SCOREBOARD = {
 			});
 		};
 
-		const tmp = new ScoreCardTemplate();
+		const tmp = new ScoreCard();
 
 		for (const [sectionKey, section] of Object.entries(tmp)) {
 			const sectionElement = UI.scoreBoard.table.querySelector(
@@ -76,6 +79,7 @@ const SCOREBOARD = {
 				sectionElement.append(row);
 			}
 		}
+
 		const midSection = UI.scoreBoard.table.querySelector("tbody.sum");
 
 		midSection.querySelector("tr.upper-sum").append(...createPlayerCells());

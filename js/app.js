@@ -1,11 +1,15 @@
 import { YATZY, SCOREBOARD, UI } from "./yatzy.js";
+import Player from "./modules/Player.js";
 import ScoreCard from "./modules/ScoreCard.js";
 
+YATZY.players.push(new Player("Player One"), new Player("Player Two"));
+
 YATZY.onUpdate = () => {
+	if (!YATZY.players.length) return;
 	UI.optionList.innerHTML = null;
 	const tmp = new ScoreCard();
 	const score = tmp.getDiceScore(YATZY.dice.values);
-	const player = YATZY.currentPlayer;
+	const player = YATZY.players.current;
 	for (const [sectionKey, section] of Object.entries(score)) {
 		for (const key of Object.keys(section)) {
 			const value = section[key].value;
@@ -26,8 +30,6 @@ YATZY.onUpdate = () => {
 YATZY.setup();
 
 YATZY.start();
-
-YATZY.nextRound();
 
 let intervalID = null;
 document.addEventListener("keydown", ev => {

@@ -1,26 +1,20 @@
 import DICE from "./setup/dice.js";
 import SCOREBOARD from "./setup/scoreboard.js";
 import UI from "./setup/ui.js";
-import Player from "./modules/Player.js";
+import PLAYERS from "./setup/players.js";
 
 const YATZY = {
-	players: [new Player("Player 1"), new Player("Player 2")],
+	players: PLAYERS,
 	dice: DICE,
-	currentPlayerIndex: 0,
 	onUpdate: 0,
-	get currentPlayer() {
-		return this.players[this.currentPlayerIndex];
-	},
 	start() {
-		this.currentPlayerIndex = 0;
-		console.log(`Current Player: ${this.currentPlayer.name}`);
+		if (!this.players.length) return;
+		console.log(`Current Player: ${this.players.current.name}`);
 		console.log("Bamboozled... this isn't playable yet!");
 	},
 	nextRound() {
-		this.currentPlayerIndex++;
-		if (this.currentPlayerIndex >= this.players.length)
-			this.currentPlayerIndex = 0;
-		console.log(`Current Player: ${this.currentPlayer.name}`);
+		this.players.setNext();
+		console.log(`Current Player: ${this.players.current.name}`);
 	},
 	setup() {
 		SCOREBOARD.players = this.players;
