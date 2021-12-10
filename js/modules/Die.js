@@ -23,9 +23,13 @@ export default class Die {
 	setLocked(locked) {
 		this.locked = !!locked;
 		if (!this.view.element) return;
-		this.locked
-			? this.view.element.classList.add("locked")
-			: this.view.element.classList.remove("locked");
+		if (this.locked) {
+			this.view.element.classList.add("locked");
+			this.view.element.setAttribute("title", "Unlock Dice");
+			return;
+		}
+		this.view.element.classList.remove("locked");
+		this.view.element.setAttribute("title", "Lock Dice");
 	}
 	/**
 	 * @param {Number} interval

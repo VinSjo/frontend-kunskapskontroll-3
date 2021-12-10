@@ -20,7 +20,6 @@ export default class DieView {
 	updateValue(value) {
 		if (!this.element) return;
 		this.element.dataset.value = value;
-		this.element.setAttribute("title", value);
 		const visibleDots = [];
 		if (value % 2 !== 0) visibleDots.push(3);
 		if (value > 1) visibleDots.push(1, 5);
@@ -38,6 +37,7 @@ export default class DieView {
 		const randomOffset = max => {
 			return Math.round(Math.random() * max * 2) - max;
 		};
+
 		this.animating = true;
 
 		this.element.style.transition = `transform ${interval}ms linear`;

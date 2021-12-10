@@ -1,13 +1,11 @@
 import Die from "../modules/Die.js";
-
-const dieTemplate = document.querySelector("template#dice");
-const dieContainer = document.querySelector(".dice.container");
+import UI from "./ui.js";
 
 const DICE = [];
 
 while (DICE.length < 5) {
 	const die = new Die();
-	die.view.setTemplate(dieTemplate);
+	die.view.setTemplate(UI.dice.template);
 	die.setValue(1);
 	DICE.push(die);
 }
@@ -45,6 +43,6 @@ Object.defineProperties(DICE, {
 	},
 });
 
-dieContainer.append(...DICE.elements);
+UI.dice.container.append(...DICE.elements);
 
 export default DICE;

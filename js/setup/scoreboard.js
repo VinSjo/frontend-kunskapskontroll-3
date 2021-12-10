@@ -1,26 +1,24 @@
 import { ScoreCardTemplate } from "../modules/ScoreCard.js";
-
-const scoreBoardContainer = document.querySelector(".score.container");
-const scoreBoardTable = document.querySelector("table.score");
+import UI from "./ui.js";
 /**
  * @property {HTMLTableElement} table
  * @property {Player[]} players,
  */
 const SCOREBOARD = {
-	table: scoreBoardTable,
-	container: scoreBoardContainer,
 	players: [],
 	show() {
-		this.container.classList.add("show");
+		UI.scoreBoard.container.classList.add("show");
 	},
 	hide() {
-		this.container.classList.remove("show");
+		UI.scoreBoard.container.classList.remove("show");
 	},
 	update() {
 		if (!this.players.length) return;
-		const rows = this.table.querySelectorAll("tr");
+		const rows = UI.scoreBoard.table.querySelectorAll("tr");
+
 		rows.forEach(row => {
 			if (!row.querySelectorAll("td").length) return;
+
 			this.players.forEach(player => {
 				const cell = row.querySelector(
 					`td[data-player="${player.id}"]`
@@ -33,16 +31,20 @@ const SCOREBOARD = {
 					return (cell.textContent = player.score.bonus);
 				}
 				if (row.classList.contains("total")) {
-					return (cell.textContent = player.total);
+					return (cell.textContent = player.score.total);
 				}
+				const section = row.parentElement.classList.contains("upper")
+					? "upper"
+					: "lower";
 				const key = row.getAttribute("data-key");
-				cell.textContent = player.score[key];
+				cell.textContent = player.score[section][key].value;
 			});
 		});
 	},
 	init() {
 		if (!this.players.length) return;
-		const playerNameRow = this.table.querySelector("thead.players tr");
+		const playerNameRow =
+			UI.scoreBoard.table.querySelector("thead.players tr");
 		this.players.forEach(player => {
 			const th = document.createElement("th");
 			th.textContent = player.name;
@@ -61,7 +63,7 @@ const SCOREBOARD = {
 		const tmp = new ScoreCardTemplate();
 
 		for (const [sectionKey, section] of Object.entries(tmp)) {
-			const sectionElement = this.table.querySelector(
+			const sectionElement = UI.scoreBoard.table.querySelector(
 				`tbody.${sectionKey}`
 			);
 
@@ -70,7 +72,6 @@ const SCOREBOARD = {
 				const row = document.createElement("tr");
 				row.dataset.key = key;
 				const nameCell = document.createElement("th");
-				nameCell.setAttribute("class", "name");
 				nameCell.setAttribute("scope", "row");
 				nameCell.textContent = section[key].name;
 				row.append(nameCell);
@@ -78,12 +79,12 @@ const SCOREBOARD = {
 				sectionElement.append(row);
 			}
 		}
-		const midSection = this.table.querySelector("tbody.sum");
+		const midSection = UI.scoreBoard.table.querySelector("tbody.sum");
 
 		midSection.querySelector("tr.upper-sum").append(...createPlayerCells());
 		midSection.querySelector("tr.bonus").append(...createPlayerCells());
 
-		const total = this.table.querySelector("tr.total");
+		const total = UI.scoreBoard.table.querySelector("tr.total");
 		total.append(...createPlayerCells());
 	},
 };

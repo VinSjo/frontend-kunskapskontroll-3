@@ -55,7 +55,6 @@ class ScoreCard extends ScoreCardTemplate {
 	constructor() {
 		super();
 	}
-	get values() {}
 	get upperSum() {
 		return this.reduceSection("upper");
 	}
@@ -80,8 +79,9 @@ class ScoreCard extends ScoreCardTemplate {
 		return output;
 	}
 	reduceSection(sectionName) {
-		return Object.values(this[sectionName]).reduce((sum, { value }) =>
-			typeof value === "number" ? sum + value : sum
+		return Object.values(this[sectionName]).reduce(
+			(sum, { value }) => (typeof value === "number" ? sum + value : sum),
+			0
 		);
 	}
 	getDiceScore(diceValues, onlyAvailable = true) {

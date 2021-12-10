@@ -30,6 +30,7 @@ button {
 	font-size: 1rem;
 	padding: 0.5em 1.5em;
 	cursor: pointer;
+	margin: 1rem;
 }
 
 .container {
