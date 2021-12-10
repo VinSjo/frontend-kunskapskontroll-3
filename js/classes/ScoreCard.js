@@ -6,7 +6,7 @@ import {
 	getFullHouse,
 	getStraight,
 	getYatzy,
-} from "./calculations.js";
+} from "../functions/calculations.js";
 
 class ScoreCard {
 	constructor() {

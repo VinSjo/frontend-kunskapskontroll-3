@@ -8,7 +8,9 @@
 }
 
 .dice.container {
+	height: fit-content;
 	width: 100%;
+	max-width: 300px;
 	padding: 1rem 0;
 	display: grid;
 	grid-template: 100% / repeat(5, 1fr);
@@ -17,35 +19,35 @@
 	gap: 1rem;
 }
 
-.icon.dice {
+svg.dice {
 	height: auto;
 	width: 100%;
 	transform: translate(0, 0);
 	transition: var(--transform-transition);
 }
 
-.icon.dice rect {
+svg.dice rect {
 	fill: var(--fill-color);
 	stroke: var(--stroke-color);
 }
 
-.icon.dice circle {
+svg.dice circle {
 	opacity: 0;
 	fill: var(--stroke-color);
 }
 
-.icon.dice.locked rect {
+svg.dice.locked rect {
 	stroke: var(--locked-highlight);
 }
 
-.icon.dice.locked circle {
+svg.dice.locked circle {
 	fill: var(--locked-highlight);
 }
 
-.icon.dice.locked {
+svg.dice.locked {
 	transform: translate(0, -25%);
 }
 
-.icon.dice:not(.locked) {
+svg.dice:not(.locked) {
 	cursor: pointer;
 }

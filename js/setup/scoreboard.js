@@ -1,17 +1,11 @@
-import ScoreCard from "../modules/ScoreCard.js";
+import ScoreCard from "../classes/ScoreCard.js";
 import UI from "./ui.js";
 
 const SCOREBOARD = {
 	players: [],
-	show() {
-		UI.scoreBoard.container.classList.add("show");
-	},
-	hide() {
-		UI.scoreBoard.container.classList.remove("show");
-	},
 	update() {
 		if (!this.players.length) return;
-		const rows = UI.scoreBoard.table.querySelectorAll("tr");
+		const rows = UI.scoreBoard.querySelectorAll("tr");
 
 		rows.forEach(row => {
 			if (!row.querySelectorAll("td").length) return;
@@ -42,8 +36,7 @@ const SCOREBOARD = {
 	init() {
 		if (!this.players.length) return;
 
-		const playerNameRow =
-			UI.scoreBoard.table.querySelector("thead.players tr");
+		const playerNameRow = UI.scoreBoard.querySelector("thead.players tr");
 
 		this.players.forEach(player => {
 			const th = document.createElement("th");
@@ -63,7 +56,7 @@ const SCOREBOARD = {
 		const tmp = new ScoreCard();
 
 		for (const [sectionKey, section] of Object.entries(tmp)) {
-			const sectionElement = UI.scoreBoard.table.querySelector(
+			const sectionElement = UI.scoreBoard.querySelector(
 				`tbody.${sectionKey}`
 			);
 
@@ -80,13 +73,14 @@ const SCOREBOARD = {
 			}
 		}
 
-		const midSection = UI.scoreBoard.table.querySelector("tbody.sum");
+		const midSection = UI.scoreBoard.querySelector("tbody.sum");
 
 		midSection.querySelector("tr.upper-sum").append(...createPlayerCells());
 		midSection.querySelector("tr.bonus").append(...createPlayerCells());
 
-		const total = UI.scoreBoard.table.querySelector("tr.total");
+		const total = UI.scoreBoard.querySelector("tr.total");
 		total.append(...createPlayerCells());
+		UI.scoreBoard.classList.add("show");
 	},
 };
 

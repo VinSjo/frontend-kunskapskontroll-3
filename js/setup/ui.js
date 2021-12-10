@@ -3,16 +3,9 @@ const UI = {
 		roll: document.querySelector("button.roll"),
 	},
 	optionList: document.querySelector("ul.options"),
-	scoreBoard: {
-		table: document.querySelector("table.score"),
-		container: document.querySelector(".score.container"),
-		buttons: {
-			show: document.querySelector("button.score.show"),
-			hide: document.querySelector("button.score.hide"),
-		},
-	},
+	scoreBoard: document.querySelector("table.score"),
 	dice: {
-		template: document.querySelector("template#dice"),
+		elements: [...document.querySelectorAll("svg.dice")],
 		container: document.querySelector(".dice.container"),
 	},
 };
