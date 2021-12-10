@@ -8,18 +8,18 @@
 }
 
 .dice.container {
-	max-height: 5rem;
-	flex-shrink: 0;
+	width: 100%;
+	padding: 1rem 0;
 	display: grid;
 	grid-template: 100% / repeat(5, 1fr);
 	align-items: center;
 	justify-items: center;
-	gap: 0.5rem;
+	gap: 1rem;
 }
 
 .icon.dice {
-	height: 100%;
-	width: auto;
+	height: auto;
+	width: 100%;
 	transform: translate(0, 0);
 	transition: var(--transform-transition);
 }

@@ -83,68 +83,6 @@ function getStraight(values, start = 1) {
 	return points;
 }
 
-function calculateUpperSection(occurrences) {
-	const output = scoreCardTemplate().upper;
-	Object.keys(output).forEach(key => {
-		const number = parseInt(key);
-		const index = number - 1;
-		output[key] = occurrences[index] * number;
-	});
-	return output;
-}
-
-function scoreCardTemplate() {
-	return {
-		upper: {
-			1: 0,
-			2: 0,
-			3: 0,
-			4: 0,
-			5: 0,
-			6: 0,
-		},
-		lower: {
-			pair: 0,
-			twoPair: 0,
-			threeOfKind: 0,
-			fourOfKind: 0,
-			smallStraight: 0,
-			largeStraight: 0,
-			fullHouse: 0,
-			chance: 0,
-			yatzy: 0,
-		},
-	};
-}
-
-/**
- * @param {Number[]} values
- */
-function calculateDiceScore(values) {
-	const score = scoreCardTemplate();
-	score.lower.chance = values.reduce((sum, value) => sum + value, 0);
-	score.lower.smallStraight = getStraight(values, 1);
-	score.lower.largeStraight = getStraight(values, 2);
-	const occurrences = getOccurrences(values);
-	score.upper = calculateUpperSection(occurrences);
-
-	const pairs = getPairs(occurrences);
-
-	if (!pairs.length) return score;
-
-	score.lower.pair = Math.max(...pairs);
-	score.lower.threeOfKind = getThreeOfKind(occurrences);
-
-	if (pairs.length > 1) {
-		score.lower.twoPair = (pairs[0] + pairs[1]) * 2;
-		score.lower.pair = Math.max(...pairs);
-		score.lower.fullHouse = getFullHouse(occurrences);
-	}
-	score.lower.fourOfKind = getFourOfKind(occurrences);
-	score.lower.yatzy = getYatzy(occurrences);
-	return score;
-}
-
 export {
 	getOccurrences,
 	filterByOccurance,
@@ -154,7 +92,4 @@ export {
 	getFullHouse,
 	getStraight,
 	getYatzy,
-	scoreCardTemplate,
-	calculateUpperSection,
-	calculateDiceScore,
 };

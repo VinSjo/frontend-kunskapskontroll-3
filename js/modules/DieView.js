@@ -6,11 +6,12 @@ export default class DieView {
 		svgTemplate && this.setTemplate(svgTemplate);
 	}
 	/**
-	 * @param {SVGSVGElement} svgTemplate
+	 * @param {HTMLTemplateElement} dieTemplate
 	 */
-	setTemplate(svgTemplate) {
-		if (!(svgTemplate instanceof SVGSVGElement)) return;
-		this.element = svgTemplate.cloneNode(true);
+	setTemplate(dieTemplate) {
+		if (!(dieTemplate instanceof HTMLTemplateElement)) return;
+		const svg = dieTemplate.content.querySelector("svg");
+		this.element = svg.cloneNode(true);
 		this.dots = [...this.element.querySelectorAll("circle")];
 	}
 	/**
@@ -19,6 +20,7 @@ export default class DieView {
 	updateValue(value) {
 		if (!this.element) return;
 		this.element.dataset.value = value;
+		this.element.setAttribute("title", value);
 		const visibleDots = [];
 		if (value % 2 !== 0) visibleDots.push(3);
 		if (value > 1) visibleDots.push(1, 5);

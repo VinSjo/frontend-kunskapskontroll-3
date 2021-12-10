@@ -1,12 +1,12 @@
+import ScoreCard from "./ScoreCard.js";
 
-
-
-class Player {
-    constructor(name) {
-        this.name = name;
-        this.scoreBoard = {
-            
-        }
-
-    }
+export default class Player {
+	constructor(name) {
+		const id = Math.round(
+			Math.random() * (Math.random() * 1000 + Date.now() * 1000)
+		).toString();
+		this.id = id.substr(0, 5);
+		this.name = name;
+		this.score = new ScoreCard();
+	}
 }
