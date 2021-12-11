@@ -7,10 +7,6 @@
 	--table-accent-background: rgba(0, 0, 0, 0.1);
 }
 
-* {
-	/* box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.5); */
-}
-
 body {
 	background-color: var(--body-background);
 }
