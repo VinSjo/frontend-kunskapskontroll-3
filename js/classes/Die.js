@@ -1,7 +1,7 @@
 export default class Die {
 	constructor(element) {
 		this.element = element;
-		this.dots = [...element.querySelectorAll("circle")];
+		this.dots = [...element.querySelectorAll('.dice-dot')];
 		this.value = 1;
 		this.locked = false;
 		this.animating = false;
@@ -11,7 +11,7 @@ export default class Die {
 	}
 	setValue(value) {
 		if (this.locked) return;
-		if (typeof value !== "number" || Number.isNaN(value)) return;
+		if (typeof value !== 'number' || Number.isNaN(value)) return;
 		if (value % 1 !== 0) value = Math.round(value);
 		if (value < 1 || value > 6) value = Math.max(Math.min(value, 6), 1);
 		this.value = value;
@@ -21,12 +21,12 @@ export default class Die {
 		this.locked = !!locked;
 		if (!this.element) return;
 		if (this.locked) {
-			this.element.classList.add("locked");
-			this.element.setAttribute("title", "Unlock Dice");
+			this.element.classList.add('locked');
+			this.element.setAttribute('title', 'Unlock Dice');
 			return;
 		}
-		this.element.classList.remove("locked");
-		this.element.setAttribute("title", "Lock Dice");
+		this.element.classList.remove('locked');
+		this.element.setAttribute('title', 'Lock Dice');
 	}
 
 	roll() {
@@ -36,12 +36,12 @@ export default class Die {
 	}
 
 	async animatedRoll(interval = 100, duration = 500) {
-		if (!this.element) return this.roll();
+		if (this.locked || !this.element) return this.value;
 		const randomOffset = max => {
 			return Math.round(Math.random() * max * 2) - max;
 		};
 		this.animating = true;
-		this.element.style.transition = `transform ${interval}ms linear`;
+		this.element.style.transition = `transform ${interval * 0.5}ms linear`;
 		let intervalID = setInterval(async () => {
 			const x = randomOffset(4),
 				y = randomOffset(4),

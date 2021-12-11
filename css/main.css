@@ -1,7 +1,8 @@
 :root {
-	--main-font: Arial, Helvetica, sans-serif;
-	--body-background: white;
+	--opacity-transition: opacity 0.2s ease;
+	--transform-transition: transform 0.2s ease;
 }
+
 * {
 	box-sizing: border-box;
 	margin: 0;
@@ -13,44 +14,102 @@
 body {
 	width: 100vw;
 	min-height: 100vh;
-	font-family: var(--main-font);
-	background-color: var(--body-background);
-}
-
-main {
-	width: 100%;
-	display: flex;
-	align-items: center;
-}
-
-button {
-	font-size: 1rem;
-	padding: 0.5em 1.5em;
-	cursor: pointer;
-	margin: 1rem;
-}
-
-.container {
-	width: 100%;
-	height: 100%;
-}
-
-.app {
-	padding: 2rem;
 	display: grid;
-	grid-template: 100% / repeat(auto-fit, minmax(300px, 1fr));
+	grid-template-rows: 3rem auto;
 	align-items: center;
 	justify-items: center;
 }
 
-.app .interface {
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+button {
+	padding: 0.25em 1em;
+	cursor: pointer;
+}
+
+header {
+	width: 100%;
+}
+
+main {
+	opacity: 0;
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 	align-items: center;
+	justify-items: center;
+	gap: 1rem;
+	padding: 1rem;
+	transition: var(--opacity-transition);
+}
+
+.play-area,
+.score-board {
+	height: 100%;
+	width: 100%;
+	max-width: 450px;
+}
+
+.play-area {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-direction: column;
 }
 
 .roll-button {
 	margin: 3em auto;
+}
+
+.score-board {
+	border-collapse: collapse;
+}
+
+.score-board th,
+.score-board td {
+	padding: 0.2em 0.5em;
+	border-width: 1px;
+	border-style: solid;
+}
+
+.start-modal {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 5;
+	padding: 2rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	transition: var(--opacity-transition), var(--transform-transition);
+}
+
+.modal-content {
+	width: 100%;
+	height: 100%;
+	max-width: 400px;
+	max-height: 500px;
+	padding: 1rem;
+	border-radius: 0.5rem;
+	display: grid;
+	grid-template-rows: 5rem auto;
+	transition: opacity 0.25s ease-in, transform 0.25s ease-in;
+}
+
+.start-modal.hide {
+	opacity: 0;
+	transform: scale(0);
+}
+
+.show {
+	opacity: 1;
+}
+
+ul {
+	list-style-type: none;
+}
+
+.game-info {
+	width: 100%;
 }

@@ -1,0 +1,47 @@
+:root {
+	--head-font: 'Oswald', sans-serif;
+	--main-font: 'Roboto Condensed', sans-serif;
+	font-size: 1rem;
+}
+
+* {
+	font-family: var(--main-font);
+	line-height: 160%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+th {
+	font-family: var(--head-font);
+}
+
+.page-title {
+	text-align: center;
+}
+
+.score-board th,
+.score-board td {
+	font-size: 0.8rem;
+	text-align: center;
+	text-transform: capitalize;
+}
+
+.score-board td {
+	font-weight: 300;
+}
+
+.score-board tbody:not(.sum) th {
+	font-weight: 400;
+}
+
+.score-board th:first-child {
+	text-align: left;
+}
+
+.player-form label {
+	text-transform: capitalize;
+}

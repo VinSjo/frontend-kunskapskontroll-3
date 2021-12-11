@@ -1,0 +1,51 @@
+:root {
+	--body-background: white;
+	--dice-fill: var(--body-background);
+	--dice-accent: black;
+	--dice-accent-locked: rgb(245, 25, 0);
+	--table-border-color: rgba(0, 0, 0, 0.25);
+	--table-accent-background: rgba(0, 0, 0, 0.1);
+}
+
+* {
+	/* box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.5); */
+}
+
+body {
+	background-color: var(--body-background);
+}
+
+.start-modal {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+.modal-content {
+	background-color: var(--body-background);
+}
+
+.dice-body {
+	fill: var(--dice-fill);
+	stroke: var(--dice-accent);
+}
+
+.dice-dot {
+	fill: var(--dice-accent);
+}
+
+.dice-icon.locked .dice-body {
+	stroke: var(--dice-accent-locked);
+}
+
+.dice-icon.locked .dice-dot {
+	fill: var(--dice-accent-locked);
+}
+
+th,
+td {
+	border-color: var(--table-border-color);
+}
+
+tbody.sum,
+tfoot {
+	background-color: var(--table-accent-background);
+}

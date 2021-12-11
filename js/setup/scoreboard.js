@@ -1,33 +1,35 @@
-import ScoreCard from "../classes/ScoreCard.js";
-import UI from "./ui.js";
+import ScoreCard from '../classes/ScoreCard.js';
+import UI from './ui.js';
 
 const SCOREBOARD = {
 	players: [],
-	update() {
+	update(displayTotal = false) {
 		if (!this.players.length) return;
-		const rows = UI.scoreBoard.querySelectorAll("tr");
+		const rows = UI.scoreBoard.querySelectorAll('tr');
 
 		rows.forEach(row => {
-			if (!row.querySelectorAll("td").length) return;
+			if (!row.querySelectorAll('td').length) return;
 
 			this.players.forEach(player => {
 				const cell = row.querySelector(
 					`td[data-player="${player.id}"]`
 				);
 				if (!cell) return;
-				if (row.classList.contains("upper-sum")) {
+				if (row.classList.contains('upper-sum')) {
 					return (cell.textContent = player.score.upperSum);
 				}
-				if (row.classList.contains("bonus")) {
+				if (row.classList.contains('bonus')) {
 					return (cell.textContent = player.score.bonus);
 				}
-				if (row.classList.contains("total")) {
-					return (cell.textContent = player.score.total);
+				if (row.classList.contains('total')) {
+					return (cell.textContent = displayTotal
+						? player.score.total
+						: null);
 				}
-				const section = row.parentElement.classList.contains("upper")
-					? "upper"
-					: "lower";
-				const key = row.getAttribute("data-key");
+				const section = row.parentElement.classList.contains('upper')
+					? 'upper'
+					: 'lower';
+				const key = row.getAttribute('data-key');
 
 				cell.textContent = player.score[section][key].value;
 			});
@@ -36,18 +38,18 @@ const SCOREBOARD = {
 	init() {
 		if (!this.players.length) return;
 
-		const playerNameRow = UI.scoreBoard.querySelector("thead.players tr");
+		const playerNameRow = UI.scoreBoard.querySelector('thead.players tr');
 
 		this.players.forEach(player => {
-			const th = document.createElement("th");
+			const th = document.createElement('th');
 			th.textContent = player.name;
-			th.setAttribute("scope", "col");
+			th.setAttribute('scope', 'col');
 			playerNameRow.append(th);
 		});
-		const createPlayerCells = () => {
+		const createPlayerCells = (textContent = '0') => {
 			return this.players.map(player => {
-				const td = document.createElement("td");
-				td.textContent = `0`;
+				const td = document.createElement('td');
+				td.textContent = textContent;
 				td.dataset.player = player.id;
 				return td;
 			});
@@ -61,11 +63,11 @@ const SCOREBOARD = {
 			);
 
 			for (const key of Object.keys(section)) {
-				if (key === "bonus") continue;
-				const row = document.createElement("tr");
+				if (key === 'bonus') continue;
+				const row = document.createElement('tr');
 				row.dataset.key = key;
-				const nameCell = document.createElement("th");
-				nameCell.setAttribute("scope", "row");
+				const nameCell = document.createElement('th');
+				nameCell.setAttribute('scope', 'row');
 				nameCell.textContent = section[key].name;
 				row.append(nameCell);
 				row.append(...createPlayerCells());
@@ -73,14 +75,15 @@ const SCOREBOARD = {
 			}
 		}
 
-		const midSection = UI.scoreBoard.querySelector("tbody.sum");
+		const midSection = UI.scoreBoard.querySelector('tbody.sum');
 
-		midSection.querySelector("tr.upper-sum").append(...createPlayerCells());
-		midSection.querySelector("tr.bonus").append(...createPlayerCells());
+		midSection.querySelector('tr.upper-sum').append(...createPlayerCells());
+		midSection.querySelector('tr.bonus').append(...createPlayerCells());
 
-		const total = UI.scoreBoard.querySelector("tr.total");
-		total.append(...createPlayerCells());
-		UI.scoreBoard.classList.add("show");
+		const total = UI.scoreBoard.querySelector('tr.total');
+		total.append(...createPlayerCells(''));
+
+		UI.scoreBoard.classList.add('show');
 	},
 };
 

@@ -1,5 +1,5 @@
-import Die from "../classes/Die.js";
-import UI from "./ui.js";
+import Die from '../classes/Die.js';
+import UI from './ui.js';
 
 const DICE = UI.dice.elements.map(element => {
 	const die = new Die(element);

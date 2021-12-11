@@ -6,33 +6,52 @@ import {
 	getFullHouse,
 	getStraight,
 	getYatzy,
-} from "../functions/calculations.js";
+} from '../functions/calculations.js';
 
 class ScoreCard {
+	static get maxScore() {
+		const score = new ScoreCard();
+		for (const key of Object.keys(score.upper)) {
+			const number = parseInt(key);
+			score.upper[key].value = number * 5;
+		}
+		score.lower.bonus.value = 50;
+		score.lower.pair.value = 6 * 2;
+		score.lower.twoPair.value = 6 * 2 + 5 * 2;
+		score.lower.threeOfKind.value = 6 * 3;
+		score.lower.fourOfKind.value = 4 * 6;
+		score.lower.fullHouse.value = 5 * 2 + 6 * 3;
+		score.lower.smallStraight.value = 15;
+		score.lower.largeStraight.value = 20;
+		score.lower.chance.value = 6 * 5;
+		score.lower.yatzy.value = 50;
+		return score;
+	}
+
 	constructor() {
 		const newRow = (name, value = 0) => ({
 			name: name,
 			value: value,
 		});
 		const upper = {
-			1: newRow("one"),
-			2: newRow("two"),
-			3: newRow("three"),
-			4: newRow("four"),
-			5: newRow("five"),
-			6: newRow("six"),
+			1: newRow('one'),
+			2: newRow('two'),
+			3: newRow('three'),
+			4: newRow('four'),
+			5: newRow('five'),
+			6: newRow('six'),
 		};
 		const lower = {
-			bonus: newRow("bonus"),
-			pair: newRow("one pair"),
-			twoPair: newRow("two pair"),
-			threeOfKind: newRow("three of a kind"),
-			fourOfKind: newRow("four of a kind"),
-			smallStraight: newRow("small straight"),
-			largeStraight: newRow("large straight"),
-			fullHouse: newRow("full house"),
-			chance: newRow("chance"),
-			yatzy: newRow("yatzy"),
+			bonus: newRow('bonus'),
+			pair: newRow('one pair'),
+			twoPair: newRow('two pair'),
+			threeOfKind: newRow('three of a kind'),
+			fourOfKind: newRow('four of a kind'),
+			smallStraight: newRow('small straight'),
+			largeStraight: newRow('large straight'),
+			fullHouse: newRow('full house'),
+			chance: newRow('chance'),
+			yatzy: newRow('yatzy'),
 		};
 		Object.defineProperties(this, {
 			upper: { value: upper, enumerable: true },
@@ -40,10 +59,10 @@ class ScoreCard {
 		});
 	}
 	get upperSum() {
-		return this.reduceSection("upper");
+		return this.reduceSection('upper');
 	}
 	get lowerSum() {
-		return this.reduceSection("lower");
+		return this.reduceSection('lower');
 	}
 	get bonus() {
 		return this.upperSum >= 63 ? 50 : 0;
@@ -64,7 +83,7 @@ class ScoreCard {
 	}
 	reduceSection(sectionName) {
 		return Object.values(this[sectionName]).reduce(
-			(sum, { value }) => (typeof value === "number" ? sum + value : sum),
+			(sum, { value }) => (typeof value === 'number' ? sum + value : sum),
 			0
 		);
 	}

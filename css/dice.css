@@ -1,53 +1,31 @@
-:root {
-	--fill-color: white;
-	--stroke-color: black;
-	--locked-highlight: red;
-	--opacity-transition: opacity 0.1s ease;
-	--transform-transition: transform 0.2s ease-out;
-	--disabled-dice-transform: translateY(-25%);
-}
-
-.dice.container {
+.dice-container {
 	height: fit-content;
+	max-height: 2rem;
 	width: 100%;
-	max-width: 300px;
 	padding: 1rem 0;
 	display: grid;
-	grid-template: 100% / repeat(5, 1fr);
+	grid-template-columns: repeat(5, 1fr);
 	align-items: center;
 	justify-items: center;
 	gap: 1rem;
 }
 
-svg.dice {
+.dice-icon {
 	height: auto;
+	max-height: 4rem;
 	width: 100%;
-	transform: translate(0, 0);
 	transition: var(--transform-transition);
 }
 
-svg.dice rect {
-	fill: var(--fill-color);
-	stroke: var(--stroke-color);
-}
-
-svg.dice circle {
+.dice-dot {
 	opacity: 0;
-	fill: var(--stroke-color);
+	transition: opacity 0.1s linear;
 }
 
-svg.dice.locked rect {
-	stroke: var(--locked-highlight);
+.dice-icon.locked {
+	transform: translateY(-25%);
 }
 
-svg.dice.locked circle {
-	fill: var(--locked-highlight);
-}
-
-svg.dice.locked {
-	transform: translate(0, -25%);
-}
-
-svg.dice:not(.locked) {
+.dice-icon:not(.locked) {
 	cursor: pointer;
 }

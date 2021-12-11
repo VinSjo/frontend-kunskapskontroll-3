@@ -4,130 +4,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/color.css">
+    <link rel="stylesheet" type="text/css" href="css/typography.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/form.css">
     <link rel="stylesheet" type="text/css" href="css/dice.css">
-    <link rel="stylesheet" type="text/css" href="css/scoreboard.css">
+
     <script type="module" src="js/index.js"></script>
-    <title>Yatzy</title>
+    <title>Kunskapskontroll 3 - Vincent Sjögren</title>
 </head>
 
 <body>
+    <header>
+        <h1 class="page-title">Yatzy</h1>
+    </header>
     <main>
-        <div class="app container">
-            <section class="interface">
-                <div class="dice container">
-                    <svg class="dice" width="64" height="64" viewBox="0 0 64 64"
-                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="1.5" y="1.5" width="61" height="61" rx="6.5"
-                            stroke-width="3" />
-                        <circle cx="14" cy="14" r="6" />
-                        <circle cx="50" cy="14" r="6" />
-                        <circle cx="14" cy="32" r="6" />
-                        <circle cx="32" cy="32" r="6" />
-                        <circle cx="50" cy="32" r="6" />
-                        <circle cx="14" cy="50" r="6" />
-                        <circle cx="50" cy="50" r="6" />
-                    </svg>
-                    <svg class="dice" width="64" height="64" viewBox="0 0 64 64"
-                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="1.5" y="1.5" width="61" height="61" rx="6.5"
-                            stroke-width="3" />
-                        <circle cx="14" cy="14" r="6" />
-                        <circle cx="50" cy="14" r="6" />
-                        <circle cx="14" cy="32" r="6" />
-                        <circle cx="32" cy="32" r="6" />
-                        <circle cx="50" cy="32" r="6" />
-                        <circle cx="14" cy="50" r="6" />
-                        <circle cx="50" cy="50" r="6" />
-                    </svg>
-                    <svg class="dice" width="64" height="64" viewBox="0 0 64 64"
-                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="1.5" y="1.5" width="61" height="61" rx="6.5"
-                            stroke-width="3" />
-                        <circle cx="14" cy="14" r="6" />
-                        <circle cx="50" cy="14" r="6" />
-                        <circle cx="14" cy="32" r="6" />
-                        <circle cx="32" cy="32" r="6" />
-                        <circle cx="50" cy="32" r="6" />
-                        <circle cx="14" cy="50" r="6" />
-                        <circle cx="50" cy="50" r="6" />
-                    </svg>
-                    <svg class="dice" width="64" height="64" viewBox="0 0 64 64"
-                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="1.5" y="1.5" width="61" height="61" rx="6.5"
-                            stroke-width="3" />
-                        <circle cx="14" cy="14" r="6" />
-                        <circle cx="50" cy="14" r="6" />
-                        <circle cx="14" cy="32" r="6" />
-                        <circle cx="32" cy="32" r="6" />
-                        <circle cx="50" cy="32" r="6" />
-                        <circle cx="14" cy="50" r="6" />
-                        <circle cx="50" cy="50" r="6" />
-                    </svg>
-                    <svg class="dice" width="64" height="64" viewBox="0 0 64 64"
-                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="1.5" y="1.5" width="61" height="61" rx="6.5"
-                            stroke-width="3" />
-                        <circle cx="14" cy="14" r="6" />
-                        <circle cx="50" cy="14" r="6" />
-                        <circle cx="14" cy="32" r="6" />
-                        <circle cx="32" cy="32" r="6" />
-                        <circle cx="50" cy="32" r="6" />
-                        <circle cx="14" cy="50" r="6" />
-                        <circle cx="50" cy="50" r="6" />
-                    </svg>
-                </div>
+        <section class="play-area">
+            <div class="dice-container">
+                <svg class="dice-icon" width="64" height="64"
+                    viewBox="0 0 64 64" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <rect class="dice-body" x="1.5" y="1.5" width="61"
+                        height="61" rx="6.5" stroke-width="3" />
+                    <circle class="dice-dot" cx="14" cy="14" r="6" />
+                    <circle class="dice-dot" cx="50" cy="14" r="6" />
+                    <circle class="dice-dot" cx="14" cy="32" r="6" />
+                    <circle class="dice-dot" cx="32" cy="32" r="6" />
+                    <circle class="dice-dot" cx="50" cy="32" r="6" />
+                    <circle class="dice-dot" cx="14" cy="50" r="6" />
+                    <circle class="dice-dot" cx="50" cy="50" r="6" />
+                </svg>
+                <svg class="dice-icon" width="64" height="64"
+                    viewBox="0 0 64 64" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <rect class="dice-body" x="1.5" y="1.5" width="61"
+                        height="61" rx="6.5" stroke-width="3" />
+                    <circle class="dice-dot" cx="14" cy="14" r="6" />
+                    <circle class="dice-dot" cx="50" cy="14" r="6" />
+                    <circle class="dice-dot" cx="14" cy="32" r="6" />
+                    <circle class="dice-dot" cx="32" cy="32" r="6" />
+                    <circle class="dice-dot" cx="50" cy="32" r="6" />
+                    <circle class="dice-dot" cx="14" cy="50" r="6" />
+                    <circle class="dice-dot" cx="50" cy="50" r="6" />
+                </svg>
+                <svg class="dice-icon" width="64" height="64"
+                    viewBox="0 0 64 64" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <rect class="dice-body" x="1.5" y="1.5" width="61"
+                        height="61" rx="6.5" stroke-width="3" />
+                    <circle class="dice-dot" cx="14" cy="14" r="6" />
+                    <circle class="dice-dot" cx="50" cy="14" r="6" />
+                    <circle class="dice-dot" cx="14" cy="32" r="6" />
+                    <circle class="dice-dot" cx="32" cy="32" r="6" />
+                    <circle class="dice-dot" cx="50" cy="32" r="6" />
+                    <circle class="dice-dot" cx="14" cy="50" r="6" />
+                    <circle class="dice-dot" cx="50" cy="50" r="6" />
+                </svg>
+                <svg class="dice-icon" width="64" height="64"
+                    viewBox="0 0 64 64" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <rect class="dice-body" x="1.5" y="1.5" width="61"
+                        height="61" rx="6.5" stroke-width="3" />
+                    <circle class="dice-dot" cx="14" cy="14" r="6" />
+                    <circle class="dice-dot" cx="50" cy="14" r="6" />
+                    <circle class="dice-dot" cx="14" cy="32" r="6" />
+                    <circle class="dice-dot" cx="32" cy="32" r="6" />
+                    <circle class="dice-dot" cx="50" cy="32" r="6" />
+                    <circle class="dice-dot" cx="14" cy="50" r="6" />
+                    <circle class="dice-dot" cx="50" cy="50" r="6" />
+                </svg>
+                <svg class="dice-icon" width="64" height="64"
+                    viewBox="0 0 64 64" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <rect class="dice-body" x="1.5" y="1.5" width="61"
+                        height="61" rx="6.5" stroke-width="3" />
+                    <circle class="dice-dot" cx="14" cy="14" r="6" />
+                    <circle class="dice-dot" cx="50" cy="14" r="6" />
+                    <circle class="dice-dot" cx="14" cy="32" r="6" />
+                    <circle class="dice-dot" cx="32" cy="32" r="6" />
+                    <circle class="dice-dot" cx="50" cy="32" r="6" />
+                    <circle class="dice-dot" cx="14" cy="50" r="6" />
+                    <circle class="dice-dot" cx="50" cy="50" r="6" />
+                </svg>
+            </div>
 
-                <button class="roll">Roll</button>
-
+            <article class="game-info">
+                <h4 class="current-round"></h4>
+                <h4 class="current-player"></h4>
+                <h4 class="rolls-left"></h4>
                 <ul class="options">
 
                 </ul>
-            </section>
-            <table class="score">
-                <thead class="players">
-                    <tr>
-                        <th scope="row">Players</th>
-                    </tr>
-                </thead>
-                <tbody class="upper">
+            </article>
 
-                </tbody>
-                <tbody class="sum">
-                    <tr class="upper-sum">
-                        <th scope="row">Sum</th>
-                    </tr>
-                    <tr class="bonus">
-                        <th scope="row">Bonus</th>
-                    </tr>
-                </tbody>
-                <tbody class="lower">
+            <button class="roll">Roll</button>
 
-                </tbody>
-                <tfoot>
-                    <tr class="total">
-                        <th scope="row">Total</th>
-                    </tr>
-                </tfoot>
-            </table>
+        </section>
+        <table class="score-board">
+            <thead class="players">
+                <tr>
+                    <th scope="row">Players</th>
+                </tr>
+            </thead>
+            <tbody class="upper">
 
-        </div>
+            </tbody>
+            <tbody class="sum">
+                <tr class="upper-sum">
+                    <th scope="row">Sum</th>
+                </tr>
+                <tr class="bonus">
+                    <th scope="row">Bonus</th>
+                </tr>
+            </tbody>
+            <tbody class="lower">
+
+            </tbody>
+            <tfoot>
+                <tr class="total">
+                    <th scope="row">Total</th>
+                </tr>
+            </tfoot>
+        </table>
     </main>
 
-    <!-- <template id="dice">
-        <svg class="icon dice" width="64" height="64" viewBox="0 0 64 64"
-            fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="1.5" y="1.5" width="61" height="61" rx="6.5"
-                stroke-width="3" />
-            <circle cx="14" cy="14" r="6" />
-            <circle cx="50" cy="14" r="6" />
-            <circle cx="14" cy="32" r="6" />
-            <circle cx="32" cy="32" r="6" />
-            <circle cx="50" cy="32" r="6" />
-            <circle cx="14" cy="50" r="6" />
-            <circle cx="50" cy="50" r="6" />
-        </svg>
-    </template> -->
+    <aside class="start-modal">
+        <section class="modal-content">
+            <div class="modal-header">
+                <h2>Welcome to Yatzy!</h2>
+                <p>Please enter the names of the players.</p>
+            </div>
+            <form class="player-form">
+                <div class="input-container">
+                </div>
+                <div class="button-container">
+                    <button class="add" type="button">Add player</button>
+                    <button class="names-submit" disabled>Start Game</button>
+                </div>
+            </form>
+        </section>
+    </aside>
+
+    <template id="player-fieldset">
+        <fieldset class="player-fields" id="player-1">
+            <label class="name-label" for="playername-1">name:</label>
+            <input class="name-input" type="text" id="playername-1"
+                value="Player One" maxlength="20" required>
+            <label class="type-label" for="playertype-1">type:</label>
+            <select class="type-select" id="playertype-1">
+                <option value="human" selected>Human</option>
+                <option value="cpu">Computer</option>
+            </select>
+            <button class="delete-button" type="button">Delete</button>
+        </fieldset>
+    </template>
 </body>
 
 </html>
