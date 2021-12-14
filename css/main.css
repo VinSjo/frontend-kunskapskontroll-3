@@ -34,7 +34,7 @@ main {
 	grid-template-areas:
 		'info roll-button'
 		'score dice';
-	gap: 2rem;
+	gap: 1rem;
 	transition: var(--opacity-transition);
 }
 
@@ -113,10 +113,14 @@ section.dice {
 
 .score-table th,
 .score-table td {
-	padding: 0.2em 0.5em;
+	padding: 0.25em;
 	border-width: 1px;
 	border-style: solid;
-	min-width: 15ch;
+}
+
+.score-table td {
+	min-width: 5ch;
+	max-width: 20ch;
 }
 
 .score-table td.current.option,

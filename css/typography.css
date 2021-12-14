@@ -30,8 +30,12 @@ th {
 	text-transform: capitalize;
 }
 
+.score-table thead td {
+	font-weight: 700;
+}
+
 .score-table td {
-	font-weight: 300;
+	font-weight: 400;
 }
 
 .score-table td.option {

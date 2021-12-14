@@ -3,6 +3,7 @@ import { GAME, DICE, PLAYERS, START_FORM } from './setup/setup.js';
 import ScoreTableCell from './classes/ScoreTableCell.js';
 import Player from './classes/Player.js';
 import AiPlayer from './classes/AiPlayer.js';
+import Die from './classes/Die.js';
 
 START_FORM.addFieldset();
 
@@ -20,9 +21,9 @@ function updateRollsLeftText() {
 async function updateCurrentPlayer() {
 	const player = PLAYERS.currentPlayer;
 	player.setCurrent();
-	UI.currentPlayerText.textContent = `Current player: ${player.name}`;
+	UI.currentPlayerText.textContent = `Current: ${player.name}`;
 	if (player.type !== 'human') {
-		await player.automateTurn(UI.buttons.roll);
+		await player.automateTurn(onRollClick, onDieClick, onCellSelect);
 	}
 }
 
@@ -37,6 +38,28 @@ function updateDiceState() {
 		}
 		die.element.classList.remove('disabled');
 	});
+}
+
+async function onRollClick() {
+	const unlockedDice = DICE.filter(die => !die.isLocked);
+	if (GAME.finished || !unlockedDice) return;
+	UI.buttons.roll.disabled = true;
+	const player = PLAYERS.currentPlayer;
+	await player.animatedRoll(onCellSelect);
+	if (player.rollsLeft >= 1) UI.buttons.roll.disabled = false;
+	updateRollsLeftText();
+	updateDiceState();
+}
+
+/**
+ * @param {Die} die
+ */
+function onDieClick(die) {
+	if (die.element.classList.contains('disabled')) return;
+	die.isLocked = !die.isLocked;
+	const unlockedDice = DICE.filter(die => !die.unlocked).length;
+	UI.buttons.roll.disabled =
+		unlockedDice === 0 || PLAYERS.currentPlayer.rollsLeft < 1;
 }
 
 function onRoundChange() {
@@ -66,9 +89,6 @@ function onCellSelect(player) {
 	UI.buttons.roll.disabled = false;
 	updateCurrentPlayer();
 	updateRollsLeftText();
-	if (PLAYERS.currentPlayer.type !== 'human') {
-		UI.buttons.roll.dispatchEvent(new Event('click'));
-	}
 }
 
 UI.buttons.form.addField.addEventListener('click', () => {
@@ -100,16 +120,7 @@ UI.startForm.form.addEventListener('submit', ev => {
 		PLAYERS.push(player);
 	});
 
-	UI.buttons.roll.addEventListener('click', async () => {
-		const unlockedDice = DICE.filter(die => !die.isLocked);
-		if (GAME.finished || !unlockedDice) return;
-		UI.buttons.roll.disabled = true;
-		const player = PLAYERS.currentPlayer;
-		await player.animatedRoll(onCellSelect);
-		if (player.rollsLeft >= 1) UI.buttons.roll.disabled = false;
-		updateRollsLeftText();
-		updateDiceState();
-	});
+	UI.buttons.roll.addEventListener('click', onRollClick);
 
 	START_FORM.closeAndRemove();
 	updateCurrentPlayer();
@@ -119,10 +130,6 @@ UI.startForm.form.addEventListener('submit', ev => {
 
 DICE.forEach(die => {
 	die.element.addEventListener('click', () => {
-		if (die.element.classList.contains('disabled')) return;
-		die.isLocked = !die.isLocked;
-		const unlockedDice = DICE.filter(die => !die.unlocked).length;
-		UI.buttons.roll.disabled =
-			unlockedDice === 0 || PLAYERS.currentPlayer.rollsLeft < 1;
+		onDieClick(die);
 	});
 });

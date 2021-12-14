@@ -100,6 +100,7 @@ export default class Player {
 		cells.forEach(cell => {
 			if (cell.row === 'upper-sum') {
 				cell.element.textContent = this.score.upper;
+				return;
 			}
 			cell.element.textContent = this.score.bonus;
 		});
@@ -113,12 +114,13 @@ export default class Player {
 	/**
 	 * @param {Function} [onCellSelect]
 	 */
-	async animatedRoll(onCellSelect = null, interval = 100, timeout = 500) {
+	async animatedRoll(onCellSelect = null, interval = 60, timeout = 500) {
 		const dice = this.dice.filter(die => !die.isLocked);
 		if (!dice.length || this.isRolling || this.rollsLeft < 1) {
 			return this.diceValues;
 		}
 		this.rollsLeft--;
+		this.isRolling = true;
 
 		const randomOffset = max => {
 			return Math.round(Math.random() * max * 2) - max;

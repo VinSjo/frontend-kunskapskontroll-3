@@ -56,6 +56,7 @@ body,
 
 .score-table td.current.disable {
 	background-color: var(--table-disable-color);
+	color: rgba(0, 0, 0, 0.5);
 }
 
 .score-table td.winner {

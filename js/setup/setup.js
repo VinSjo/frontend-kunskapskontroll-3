@@ -2,7 +2,7 @@ import UI from './ui.js';
 import { firstCharToUpper, numberWord } from '../functions/helpers.js';
 import Die from '../classes/Die.js';
 
-const MAX_PLAYER_COUNT = 4;
+const MAX_PLAYER_COUNT = 5;
 
 const START_FORM = {
 	get fieldsets() {
