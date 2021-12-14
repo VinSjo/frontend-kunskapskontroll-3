@@ -1,6 +1,6 @@
 const UI = {
 	main: document.querySelector('main'),
-	scoreBoard: document.querySelector('.score-board'),
+	scoreTable: document.querySelector('.score-table'),
 	buttons: {
 		roll: document.querySelector('button.roll'),
 		form: {
@@ -8,17 +8,7 @@ const UI = {
 			submit: document.querySelector('button.names-submit'),
 		},
 	},
-	dice: {
-		elements: [...document.querySelectorAll('.dice-icon')],
-		container: document.querySelector('.dice-container'),
-	},
-	gameInfo: {
-		container: document.querySelector('.game-info'),
-		currentPlayer: document.querySelector('.game-info .current-player'),
-		currentRound: document.querySelector('.game-info .current-round'),
-		rollsLeft: document.querySelector('.game-info .rolls-left'),
-		options: document.querySelector('.game-info .options'),
-	},
+	dice: [...document.querySelectorAll('.dice-icon')],
 	startForm: {
 		modal: document.querySelector('.start-modal'),
 		form: document.querySelector('.player-form'),

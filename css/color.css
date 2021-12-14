@@ -5,18 +5,18 @@
 	--dice-accent-locked: rgb(245, 25, 0);
 	--table-border-color: rgba(0, 0, 0, 0.25);
 	--table-accent-background: rgba(0, 0, 0, 0.1);
+	--table-current-color: rgba(0, 255, 0, 0.2);
+	--table-disable-color: rgba(255, 0, 0, 0.5);
 }
 
-body {
+body,
+.start-modal,
+.modal-content {
 	background-color: var(--body-background);
-}
-
-.start-modal {
-	background-color: rgba(0, 0, 0, 0.2);
 }
 
 .modal-content {
-	background-color: var(--body-background);
+	box-shadow: 2px 2px 10px 5px rgba(0, 0, 0, 0.1);
 }
 
 .dice-body {
@@ -36,12 +36,28 @@ body {
 	fill: var(--dice-accent-locked);
 }
 
-th,
-td {
+.score-table th,
+.score-table td {
 	border-color: var(--table-border-color);
 }
 
-tbody.sum,
-tfoot {
+.score-table tbody.sum,
+.score-table tfoot {
 	background-color: var(--table-accent-background);
+}
+
+.score-table .player-names td.current {
+	background-color: var(--table-current-color);
+}
+
+.score-table td.current.option {
+	background-color: var(--table-current-color);
+}
+
+.score-table td.current.disable {
+	background-color: var(--table-disable-color);
+}
+
+.score-table td.winner {
+	background-color: rgba(255, 255, 0, 0.5);
 }

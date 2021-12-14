@@ -29,7 +29,9 @@ function filterByOccurance(occurrences, minCount) {
  * @returns {Number[]}
  */
 function getPairs(occurrences) {
-	return Math.max(...occurrences) < 2 ? 0 : filterByOccurance(occurrences, 2);
+	return Math.max(...occurrences) < 2
+		? []
+		: filterByOccurance(occurrences, 2);
 }
 
 /**
@@ -83,6 +85,40 @@ function getStraight(values, start = 1) {
 	return points;
 }
 
+function calculateDiceScore(diceValues) {
+	const occurrences = getOccurrences(diceValues);
+	const score = {
+		one: occurrences[0],
+		two: occurrences[1] * 2,
+		three: occurrences[2] * 3,
+		four: occurrences[3] * 4,
+		five: occurrences[4] * 5,
+		six: occurrences[5] * 6,
+		pair: 0,
+		twoPair: 0,
+		threeOfKind: 0,
+		fourOfKind: 0,
+		fullHouse: 0,
+		smallStraight: getStraight(diceValues, 1),
+		largeStraight: getStraight(diceValues, 2),
+		chance: diceValues.reduce((sum, value) => sum + value, 0),
+		yatzy: 0,
+	};
+	const pairs = getPairs(occurrences);
+	if (pairs.length < 1) return score;
+
+	score.pair = Math.max(...pairs) * 2;
+	score.threeOfKind = getThreeOfKind(occurrences);
+	score.fourOfKind = getFourOfKind(occurrences);
+	score.yatzy = getYatzy(occurrences);
+
+	if (pairs.length > 1) {
+		score.twoPair = (pairs[0] + pairs[1]) * 2;
+		score.fullHouse = getFullHouse(occurrences);
+	}
+	return score;
+}
+
 export {
 	getOccurrences,
 	filterByOccurance,
@@ -92,4 +128,5 @@ export {
 	getFullHouse,
 	getStraight,
 	getYatzy,
+	calculateDiceScore,
 };

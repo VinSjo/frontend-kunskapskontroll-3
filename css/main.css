@@ -8,9 +8,6 @@
 	margin: 0;
 	padding: 0;
 }
-/* html body {
-	overflow-x: hidden;
-} */
 body {
 	width: 100vw;
 	min-height: 100vh;
@@ -31,43 +28,81 @@ header {
 
 main {
 	opacity: 0;
-	width: 100%;
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	align-items: center;
-	justify-items: center;
-	gap: 1rem;
-	padding: 1rem;
+	grid-template: 1fr / repeat(2, 1fr);
+	gap: 2rem;
+	padding: 2rem;
 	transition: var(--opacity-transition);
 }
 
-.play-area,
-.score-board {
+section.dice {
+	justify-self: end;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	max-width: 5rem;
+}
+
+section.score {
+	height: 100%;
+	width: 100%;
+}
+
+button.roll {
+	width: 100%;
+	margin-top: 2rem;
+}
+
+.dice-container {
+	height: 100%;
+	width: fit-content;
+	padding: 0 1rem;
+	display: grid;
+	grid-template-rows: repeat(5, 1fr);
+	align-items: center;
+	justify-items: center;
+	gap: 1rem;
+	align-self: right;
+}
+.dice-icon {
+	width: auto;
+	max-width: 4rem;
+	height: 100%;
+	transition: var(--transform-transition);
+}
+
+.dice-dot {
+	opacity: 0;
+	transition: opacity 0.1s linear;
+}
+
+.dice-icon.locked {
+	transform: translateX(-25%);
+}
+
+.dice-icon:not(.locked) {
+	cursor: pointer;
+}
+
+.score-table {
+	grid-area: score-table;
+	border-collapse: collapse;
 	height: 100%;
 	width: 100%;
 	max-width: 450px;
 }
 
-.play-area {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	flex-direction: column;
-}
-
-.roll-button {
-	margin: 3em auto;
-}
-
-.score-board {
-	border-collapse: collapse;
-}
-
-.score-board th,
-.score-board td {
+.score-table th,
+.score-table td {
 	padding: 0.2em 0.5em;
 	border-width: 1px;
 	border-style: solid;
+}
+
+.score-table td.current.option,
+.score-table td.current.disable {
+	cursor: pointer;
 }
 
 .start-modal {
@@ -97,19 +132,11 @@ main {
 	transition: opacity 0.25s ease-in, transform 0.25s ease-in;
 }
 
-.start-modal.hide {
+.start-modal.hidden {
 	opacity: 0;
 	transform: scale(0);
 }
 
 .show {
 	opacity: 1;
-}
-
-ul {
-	list-style-type: none;
-}
-
-.game-info {
-	width: 100%;
 }

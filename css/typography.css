@@ -23,22 +23,26 @@ th {
 	text-align: center;
 }
 
-.score-board th,
-.score-board td {
+.score-table th,
+.score-table td {
 	font-size: 0.8rem;
 	text-align: center;
 	text-transform: capitalize;
 }
 
-.score-board td {
+.score-table td {
 	font-weight: 300;
 }
 
-.score-board tbody:not(.sum) th {
+.score-table td.option {
+	font-style: italic;
+}
+
+.score-table tbody:not(.sum) th {
 	font-weight: 400;
 }
 
-.score-board th:first-child {
+.score-table th:first-child {
 	text-align: left;
 }
 

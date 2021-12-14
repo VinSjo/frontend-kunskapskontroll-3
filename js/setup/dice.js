@@ -1,43 +1,59 @@
 import Die from '../classes/Die.js';
 import UI from './ui.js';
 
-const DICE = UI.dice.elements.map(element => {
-	const die = new Die(element);
-	die.setValue(1);
-	return die;
-});
+const DICE = UI.dice.map(element => new Die(element));
 
 Object.defineProperties(DICE, {
+	isAnimating: { value: false, writable: true },
 	values: { get: () => DICE.map(die => die.value) },
-	animating: {
-		get: () => DICE.reduce((result, die) => die.animating || result, false),
-	},
-	elements: {
-		get: () => DICE.map(die => die.element),
-	},
-	allLocked: {
-		get: () => DICE.reduce((result, die) => result && die.locked, true),
-	},
+	elements: { get: () => DICE.map(die => die.element) },
+	unlocked: { get: () => DICE.filter(die => !die.isLocked) },
 	reset: {
-		value: () =>
+		value: () => {
 			DICE.forEach(die => {
-				die.setLocked(false);
-				die.setValue(1);
-			}),
+				die.isLocked = false;
+				die.value = 1;
+			});
+		},
 	},
-	roll: {
-		value: async (animate = true) => {
-			if (!animate) return DICE.map(die => die.roll());
-			const pending = DICE.map(die => die.animatedRoll());
-			const values = [];
-			for await (const value of pending) {
-				values.push(value);
-			}
-			return values;
+	roll: { value: () => DICE.map(die => die.roll()) },
+	animateRoll: {
+		value: async (interval = 100, timeout = 500) => {
+			const dice = DICE.unlocked;
+			if (DICE.isAnimating || !dice.length) return DICE.values;
+			const randomOffset = max => {
+				return Math.round(Math.random() * max * 2) - max;
+			};
+			DICE.isAnimating = true;
+			dice.forEach(die => {
+				die.element.style.transition = `transform ${
+					interval * 0.5
+				}ms linear`;
+			});
+			let intervalID = setInterval(() => {
+				dice.forEach(die => {
+					const x = randomOffset(4),
+						y = randomOffset(4),
+						deg = randomOffset(8);
+					die.element.style.transform = `translate(${x}px,${y}px) rotate(${deg}deg)`;
+					die.roll();
+				});
+			}, interval);
+			return await new Promise(resolve => {
+				setTimeout(() => {
+					clearInterval(intervalID);
+					dice.forEach(die => {
+						die.element.style.transform = null;
+						die.element.style.transition = null;
+					});
+					DICE.isAnimating = false;
+					resolve(DICE.roll());
+				}, timeout);
+			});
 		},
 	},
 });
 
-UI.dice.container.append(...DICE.elements);
+DICE.reset();
 
 export default DICE;

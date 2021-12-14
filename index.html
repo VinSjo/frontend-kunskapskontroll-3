@@ -13,18 +13,34 @@
     <link rel="stylesheet" type="text/css" href="css/typography.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" type="text/css" href="css/form.css">
-    <link rel="stylesheet" type="text/css" href="css/dice.css">
 
     <script type="module" src="js/index.js"></script>
     <title>Kunskapskontroll 3 - Vincent Sjögren</title>
 </head>
 
 <body>
+
     <header>
         <h1 class="page-title">Yatzy</h1>
     </header>
+    <aside class="start-modal">
+        <section class="modal-content">
+            <div class="modal-header">
+                <h2>Welcome to Yatzy!</h2>
+                <p>Please enter the names of the players.</p>
+            </div>
+            <form class="player-form">
+                <div class="input-container">
+                </div>
+                <div class="button-container">
+                    <button class="add" type="button">Add player</button>
+                    <button class="names-submit" disabled>Start Game</button>
+                </div>
+            </form>
+        </section>
+    </aside>
     <main>
-        <section class="play-area">
+        <section class="dice">
             <div class="dice-container">
                 <svg class="dice-icon" width="64" height="64"
                     viewBox="0 0 64 64" fill="none"
@@ -92,74 +108,89 @@
                     <circle class="dice-dot" cx="50" cy="50" r="6" />
                 </svg>
             </div>
-
-            <article class="game-info">
-                <h4 class="current-round"></h4>
-                <h4 class="current-player"></h4>
-                <h4 class="rolls-left"></h4>
-                <ul class="options">
-
-                </ul>
-            </article>
-
             <button class="roll">Roll</button>
-
         </section>
-        <table class="score-board">
-            <thead class="players">
-                <tr>
-                    <th scope="row">Players</th>
-                </tr>
-            </thead>
-            <tbody class="upper">
+        <section class="score">
 
-            </tbody>
-            <tbody class="sum">
-                <tr class="upper-sum">
-                    <th scope="row">Sum</th>
-                </tr>
-                <tr class="bonus">
-                    <th scope="row">Bonus</th>
-                </tr>
-            </tbody>
-            <tbody class="lower">
 
-            </tbody>
-            <tfoot>
-                <tr class="total">
-                    <th scope="row">Total</th>
-                </tr>
-            </tfoot>
-        </table>
+            <table class="score-table">
+                <thead class="players">
+                    <tr class="player-names">
+                        <th scope="row">Players</th>
+                    </tr>
+                </thead>
+                <tbody class="upper">
+                    <tr class="one">
+                        <th scope="row">One</th>
+                    </tr>
+                    <tr class="two">
+                        <th scope="row">Two</th>
+                    </tr>
+                    <tr class="three">
+                        <th scope="row">Three</th>
+                    </tr>
+                    <tr class="four">
+                        <th scope="row">Four</th>
+                    </tr>
+                    <tr class="five">
+                        <th scope="row">Five</th>
+                    </tr>
+                    <tr class="six">
+                        <th scope="row">Six</th>
+                    </tr>
+                </tbody>
+                <tbody class="sum">
+                    <tr class="upper-sum">
+                        <th scope="row">Sum</th>
+                    </tr>
+                    <tr class="bonus">
+                        <th scope="row">Bonus</th>
+                    </tr>
+                </tbody>
+                <tbody class="lower">
+                    <tr class="pair">
+                        <th scope="row">Pair</th>
+                    </tr>
+                    <tr class="two-pair">
+                        <th scope="row">Two pair</th>
+                    </tr>
+                    <tr class="three-of-kind">
+                        <th scope="row">Three of a kind</th>
+                    </tr>
+                    <tr class="four-of-kind">
+                        <th scope="row">Four of a kind</th>
+                    </tr>
+                    <tr class="full-house">
+                        <th scope="row">Full house</th>
+                    </tr>
+                    <tr class="small-straight">
+                        <th scope="row">Small straight</th>
+                    </tr>
+                    <tr class="large-straight">
+                        <th scope="row">Large straight</th>
+                    </tr>
+                    <tr class="chance">
+                        <th scope="row">Chance</th>
+                    </tr>
+                    <tr class="yatzy">
+                        <th scope="row">Yatzy</th>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="total">
+                        <th scope="row">Total</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
     </main>
 
-    <aside class="start-modal">
-        <section class="modal-content">
-            <div class="modal-header">
-                <h2>Welcome to Yatzy!</h2>
-                <p>Please enter the names of the players.</p>
-            </div>
-            <form class="player-form">
-                <div class="input-container">
-                </div>
-                <div class="button-container">
-                    <button class="add" type="button">Add player</button>
-                    <button class="names-submit" disabled>Start Game</button>
-                </div>
-            </form>
-        </section>
-    </aside>
+
 
     <template id="player-fieldset">
         <fieldset class="player-fields" id="player-1">
-            <label class="name-label" for="playername-1">name:</label>
             <input class="name-input" type="text" id="playername-1"
-                value="Player One" maxlength="20" required>
-            <label class="type-label" for="playertype-1">type:</label>
-            <select class="type-select" id="playertype-1">
-                <option value="human" selected>Human</option>
-                <option value="cpu">Computer</option>
-            </select>
+                value="Player One" maxlength="20">
             <button class="delete-button" type="button">Delete</button>
         </fieldset>
     </template>

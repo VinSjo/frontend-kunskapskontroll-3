@@ -1,115 +1,78 @@
 import UI from './setup/ui.js';
-import STARTFORM from './setup/startform.js';
-import DICE from './setup/dice.js';
-import SCOREBOARD from './setup/scoreboard.js';
-import YATZY from './setup/yatzy.js';
-
+import { GAME, DICE, PLAYERS, START_FORM } from './setup/setup.js';
+import PlayerScoreCell from './classes/PlayerScoreCell.js';
 import Player from './classes/Player.js';
-import ScoreCard from './classes/ScoreCard.js';
 
-STARTFORM.addFieldset();
-STARTFORM.onUpdate();
+START_FORM.addFieldset();
+
+function onRoundChange() {
+	if (GAME.finished) return;
+	GAME.round++;
+}
+
+function onCellSelect(player) {
+	PLAYERS.nextPlayer(onRoundChange);
+	DICE.reset();
+	if (GAME.finished) {
+		UI.buttons.roll.disabled = true;
+		let winner = null;
+		PLAYERS.forEach(player => {
+			player.displaySum();
+			player.displayTotal();
+			if (!winner || player.total > winner.total) winner = player;
+		});
+		winner.setWinner();
+		console.log('Winner: ' + winner.name);
+		return;
+	}
+	PLAYERS.currentPlayer.setCurrent();
+	UI.buttons.roll.disabled = false;
+	player.rollsLeft = 3;
+}
+
+UI.buttons.form.addField.addEventListener('click', () => {
+	START_FORM.addFieldset();
+});
 
 UI.startForm.form.addEventListener('submit', ev => {
 	ev.preventDefault();
-
-	const players = STARTFORM.values.map(data => {
-		const player = new Player(data.name, data.id);
-		player.score = ScoreCard.maxScore;
-		player.type = data.type;
-		return player;
-	});
-
-	YATZY.players.push(...players);
-
-	SCOREBOARD.players = YATZY.players;
-
-	SCOREBOARD.init();
-
-	YATZY.update = () => {
-		const player = YATZY.currentPlayer;
-		const tmp = new ScoreCard();
-		const score = tmp.getDiceScore(DICE.values);
-		const maxScore = ScoreCard.maxScore;
-
-		UI.gameInfo.currentRound.textContent = `Round: ${YATZY.round}`;
-		UI.gameInfo.currentPlayer.textContent = `Player: ${player.name}`;
-		UI.gameInfo.rollsLeft.textContent = `Rolls left: ${YATZY.rollsLeft}`;
-		UI.gameInfo.options.innerHTML = null;
-
-		for (const [sectionKey, section] of Object.entries(score)) {
-			for (const key of Object.keys(section)) {
-				const value = section[key].value;
-				const name = section[key].name;
-				const maxValue = maxScore[sectionKey][key].value;
-				player.score[sectionKey][key].value = value;
-				const output = `${name}: ${value} points ( max: ${maxValue})`;
-				console.log(output);
-				if (value !== 0) {
-					const option = document.createElement('li');
-					option.textContent = output;
-					UI.gameInfo.options.append(option);
-				}
+	const rows = UI.scoreTable.querySelectorAll('tr');
+	START_FORM.data.forEach(player => {
+		const tableColumn = [];
+		rows.forEach(row => {
+			const sectionName = row.parentElement.classList[0];
+			const rowName = row.classList[0];
+			const td = document.createElement('td');
+			td.classList.add(player.id);
+			if (rowName === 'player-names') {
+				td.textContent = player.name;
 			}
-		}
-		SCOREBOARD.update();
-	};
-
-	DICE.forEach(die => {
-		die.element.addEventListener('click', () => {
-			if (die.animating) return;
-			die.setLocked(!die.locked);
-			DICE.allLocked
-				? (UI.buttons.roll.disabled = true)
-				: (UI.buttons.roll.disabled = false);
+			tableColumn.push(
+				new PlayerScoreCell(td, rowName, sectionName, player.id)
+			);
+			row.append(td);
 		});
+		PLAYERS.push(new Player(player.id, player.name, tableColumn, DICE));
 	});
 
 	UI.buttons.roll.addEventListener('click', async () => {
-		if (DICE.animating) return;
+		if (GAME.finished) return;
 		UI.buttons.roll.disabled = true;
-		await DICE.roll(true);
-		UI.buttons.roll.disabled = false;
-		YATZY.rollsLeft--;
-		if (YATZY.rollsLeft < 1) {
-			YATZY.nextPlayer();
-		}
-		UI.buttons.roll.disabled = YATZY.rollsLeft < 1;
-		YATZY.update();
+		const player = PLAYERS.currentPlayer;
+		await player.roll(onCellSelect);
+		if (player.rollsLeft >= 1) UI.buttons.roll.disabled = false;
+		console.log('rollsLeft: ' + player.rollsLeft);
 	});
 
-	const onTransitionEnd = ev => {
-		if (!ev.elapsedTime) return;
-		UI.startForm.modal.removeEventListener(
-			'transitionend',
-			onTransitionEnd
-		);
-		YATZY.update();
-		UI.startForm.modal.remove();
-		UI.startForm.modal = null;
-		UI.main.classList.add('show');
-	};
-
-	UI.startForm.modal.addEventListener('transitionend', onTransitionEnd);
-	UI.startForm.modal.classList.add('hide');
+	START_FORM.closeAndRemove();
+	PLAYERS.currentPlayer.setCurrent();
 });
 
-// let intervalID = null;
-// document.addEventListener('keydown', ev => {
-// 	if (ev.key !== ' ') return;
-// 	ev.preventDefault();
-// 	if (intervalID !== null) {
-// 		clearInterval(intervalID);
-// 		intervalID = null;
-// 		YATZY.dice.reset();
-// 		return;
-// 	}
-// 	intervalID = setInterval(() => {
-// 		UI.buttons.roll.dispatchEvent(new Event('click'));
-// 		YATZY.dice.forEach(die => {
-// 			if (Math.random() < 0.1) {
-// 				die.setLocked(!die.locked);
-// 			}
-// 		});
-// 	}, 750);
-// });
+DICE.forEach(die => {
+	die.element.addEventListener('click', () => {
+		if (PLAYERS.currentPlayer.rollsLeft >= 3 && !die.isLocked) return;
+		die.isLocked = !die.isLocked;
+		UI.buttons.roll.disabled =
+			DICE.unlocked.length === 0 && PLAYERS.currentPlayer.rollsLeft >= 1;
+	});
+});

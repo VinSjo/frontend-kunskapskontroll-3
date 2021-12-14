@@ -1,78 +1,43 @@
 export default class Die {
+	/**
+	 * @param {SVGSVGElement} element
+	 */
 	constructor(element) {
 		this.element = element;
-		this.dots = [...element.querySelectorAll('.dice-dot')];
-		this.value = 1;
-		this.locked = false;
-		this.animating = false;
 	}
-	get newValue() {
-		return Math.ceil(Math.random() * 6);
+	get isLocked() {
+		return this.element.classList.contains('locked');
 	}
-	setValue(value) {
-		if (this.locked) return;
-		if (typeof value !== 'number' || Number.isNaN(value)) return;
-		if (value % 1 !== 0) value = Math.round(value);
-		if (value < 1 || value > 6) value = Math.max(Math.min(value, 6), 1);
-		this.value = value;
-		this.updateView();
+	set isLocked(locked) {
+		locked
+			? this.element.classList.add('locked')
+			: this.element.classList.remove('locked');
 	}
-	setLocked(locked) {
-		this.locked = !!locked;
-		if (!this.element) return;
-		if (this.locked) {
-			this.element.classList.add('locked');
-			this.element.setAttribute('title', 'Unlock Dice');
-			return;
-		}
-		this.element.classList.remove('locked');
-		this.element.setAttribute('title', 'Lock Dice');
+	get value() {
+		return parseInt(this.element.dataset.value);
 	}
-
-	roll() {
-		if (this.locked) return this.value;
-		this.setValue(Math.ceil(Math.random() * 6));
-		return this.value;
-	}
-
-	async animatedRoll(interval = 100, duration = 500) {
-		if (this.locked || !this.element) return this.value;
-		const randomOffset = max => {
-			return Math.round(Math.random() * max * 2) - max;
-		};
-		this.animating = true;
-		this.element.style.transition = `transform ${interval * 0.5}ms linear`;
-		let intervalID = setInterval(async () => {
-			const x = randomOffset(4),
-				y = randomOffset(4),
-				deg = randomOffset(8);
-			this.element.style.transform = `translate(${x}px,${y}px) rotate(${deg}deg)`;
-			this.roll();
-		}, interval);
-
-		return await new Promise(resolve =>
-			setTimeout(() => {
-				clearInterval(intervalID);
-				this.element.style.transform = null;
-				this.element.style.transition = null;
-				this.animating = false;
-				resolve(this.roll());
-			}, duration)
-		);
-	}
-
-	updateView() {
-		if (!this.element) return;
-		this.element.dataset.value = this.value;
+	set value(value) {
+		this.element.dataset.value = `${value}`;
+		const dots = [...this.element.querySelectorAll('.dice-dot')];
+		if (!dots.length) return;
 		const visibleDots = [];
-		if (this.value % 2 !== 0) visibleDots.push(3);
-		if (this.value > 1) visibleDots.push(1, 5);
-		if (this.value > 3) visibleDots.push(0, 6);
-		if (this.value === 6) visibleDots.push(2, 4);
-		this.dots.forEach((dot, index) => {
+		// middle dot, if number is uneven
+		if (value % 2 !== 0) visibleDots.push(3);
+		// bottom left and top right dot
+		if (value > 1) visibleDots.push(1, 5);
+		// top left and bottom right dot
+		if (value > 3) visibleDots.push(0, 6);
+		// middle left and middle right, only if value is 6
+		if (value === 6) visibleDots.push(2, 4);
+
+		dots.forEach((dot, index) => {
 			visibleDots.includes(index)
 				? (dot.style.opacity = 1)
 				: (dot.style.opacity = 0);
 		});
+	}
+	roll() {
+		if (!this.isLocked) this.value = Math.ceil(Math.random() * 6);
+		return this.value;
 	}
 }
