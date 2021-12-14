@@ -1,6 +1,6 @@
 import UI from './ui.js';
-import DICE from './dice.js';
 import { firstCharToUpper, numberWord } from '../functions/helpers.js';
+import Die from '../classes/Die.js';
 
 const MAX_PLAYER_COUNT = 4;
 
@@ -8,11 +8,12 @@ const START_FORM = {
 	get fieldsets() {
 		return [...UI.startForm.input.container.querySelectorAll('fieldset')];
 	},
-	get data() {
+	get values() {
 		return this.fieldsets.map(fieldset => {
 			return {
 				id: fieldset.getAttribute('id'),
 				name: fieldset.querySelector('input').value,
+				type: fieldset.querySelector('select').value,
 			};
 		});
 	},
@@ -26,8 +27,9 @@ const START_FORM = {
 		const clone = UI.startForm.input.template.content.cloneNode(true);
 		const fieldset = clone.querySelector('fieldset').cloneNode(true);
 		const nameInput = fieldset.querySelector('input');
+		const typeSelect = fieldset.querySelector('select');
 
-		[fieldset, nameInput].forEach(element => {
+		[fieldset, nameInput, typeSelect].forEach(element => {
 			element.setAttribute(
 				'id',
 				element.getAttribute('id').replace(/[0-9]/g, number)
@@ -92,5 +94,7 @@ const GAME = {
 		return this.round > 15;
 	},
 };
+
+const DICE = UI.dice.map(element => new Die(element));
 
 export { GAME, PLAYERS, DICE, START_FORM };

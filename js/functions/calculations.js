@@ -85,25 +85,41 @@ function getStraight(values, start = 1) {
 	return points;
 }
 
-function calculateDiceScore(diceValues) {
-	const occurrences = getOccurrences(diceValues);
-	const score = {
-		one: occurrences[0],
-		two: occurrences[1] * 2,
-		three: occurrences[2] * 3,
-		four: occurrences[3] * 4,
-		five: occurrences[4] * 5,
-		six: occurrences[5] * 6,
+function scoreTemplate() {
+	return {
+		one: 0,
+		two: 0,
+		three: 0,
+		four: 0,
+		five: 0,
+		six: 0,
 		pair: 0,
 		twoPair: 0,
 		threeOfKind: 0,
 		fourOfKind: 0,
 		fullHouse: 0,
-		smallStraight: getStraight(diceValues, 1),
-		largeStraight: getStraight(diceValues, 2),
-		chance: diceValues.reduce((sum, value) => sum + value, 0),
+		smallStraight: 0,
+		largeStraight: 0,
+		chance: 0,
 		yatzy: 0,
 	};
+}
+/**
+ *
+ * @param {Number[]} diceValues
+ */
+function calculateDiceScore(diceValues) {
+	const occurrences = getOccurrences(diceValues);
+	const score = scoreTemplate();
+	score.one = occurrences[0];
+	score.two = occurrences[1] * 2;
+	score.three = occurrences[2] * 3;
+	score.four = occurrences[3] * 4;
+	score.five = occurrences[4] * 5;
+	score.six = occurrences[5] * 6;
+	score.smallStraight = getStraight(diceValues, 1);
+	score.largeStraight = getStraight(diceValues, 2);
+	score.chance = diceValues.reduce((sum, value) => sum + value, 0);
 	const pairs = getPairs(occurrences);
 	if (pairs.length < 1) return score;
 
@@ -119,6 +135,27 @@ function calculateDiceScore(diceValues) {
 	return score;
 }
 
+function getMaxDiceScore() {
+	const score = scoreTemplate();
+	score.one = 5;
+	score.two = 2 * 5;
+	score.three = 3 * 5;
+	score.four = 4 * 5;
+	score.five = 5 * 5;
+	score.six = 6 * 5;
+
+	score.pair = 6 * 2;
+	score.twoPair = 6 * 2 + 5 * 2;
+	score.threeOfKind = 6 * 3;
+	score.fourOfKind = 6 * 4;
+	score.fullHouse = 6 * 3 + 5 * 2;
+	score.smallStraight = getStraight([1, 2, 3, 4, 5], 1);
+	score.largeStraight = getStraight([1, 2, 3, 4, 5], 1);
+	score.chance = 6 * 5;
+	score.yatzy = 50;
+	return score;
+}
+
 export {
 	getOccurrences,
 	filterByOccurance,
@@ -128,5 +165,7 @@ export {
 	getFullHouse,
 	getStraight,
 	getYatzy,
+	scoreTemplate,
 	calculateDiceScore,
+	getMaxDiceScore,
 };

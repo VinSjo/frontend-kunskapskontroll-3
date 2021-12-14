@@ -1,11 +1,11 @@
 import Die from './Die.js';
-import PlayerScoreCell from './PlayerScoreCell.js';
+import ScoreTableCell from './ScoreTableCell.js';
 import { calculateDiceScore } from '../functions/calculations.js';
 export default class Player {
 	/**
 	 * @param {String} id
 	 * @param {String} name
-	 * @param {PlayerScoreCell[]} tableColumn
+	 * @param {ScoreTableCell[]} tableColumn
 	 * @param {Die[]} dice
 	 */
 	constructor(id, name, tableColumn, dice) {
@@ -13,23 +13,26 @@ export default class Player {
 		this.name = name;
 		this.column = tableColumn;
 		this.rollsLeft = 3;
-		this.currentDiceValues = [0, 0, 0, 0, 0];
 		this.dice = dice;
-
+		this.type = 'human';
+		this.isRolling = false;
+		/**
+		 * @param {ScoreTableCell[]} section
+		 * @returns {Number}
+		 */
 		const reduceSection = section => {
 			return section.reduce((sum, cell) => {
-				const value = cell.value;
-				return value && typeof value === 'number' ? sum + value : sum;
+				const val = cell.value;
+				return sum + (typeof val === 'number' ? val : 0);
 			}, 0);
 		};
 		const sections = {
-			upper: tableColumn.filter(cell => cell.section === 'upper'),
-			lower: tableColumn.filter(cell => cell.section === 'lower'),
-			sum: tableColumn.filter(cell => cell.section === 'sum'),
-			total: tableColumn.filter(cell => cell.row === 'total'),
+			upper: this.column.filter(cell => cell.section === 'upper'),
+			lower: this.column.filter(cell => cell.section === 'lower'),
+			sum: this.column.filter(cell => cell.section === 'sum'),
+			total: this.column.filter(cell => cell.row === 'total'),
 		};
-		this.sections = sections;
-		this.score = {
+		const score = {
 			get upper() {
 				return reduceSection(sections.upper);
 			},
@@ -43,6 +46,8 @@ export default class Player {
 				return this.upper + this.lower + this.bonus;
 			},
 		};
+		this.sections = sections;
+		this.score = score;
 	}
 
 	get availableCells() {
@@ -53,6 +58,20 @@ export default class Player {
 				cell.row !== 'total'
 		);
 	}
+
+	get diceValues() {
+		return this.dice.map(die => die.value);
+	}
+
+	get diceScore() {
+		const available = this.availableCells;
+		const diceScore = calculateDiceScore(this.diceValues);
+		const options = available.filter(cell => {
+			return diceScore[cell.scoreKey] !== 0;
+		});
+		return [diceScore, options];
+	}
+
 	resetColumnState() {
 		this.column.forEach(cell => {
 			cell.element.classList.remove('current');
@@ -79,30 +98,58 @@ export default class Player {
 	displaySum() {
 		const cells = this.sections.sum;
 		cells.forEach(cell => {
-			if (cell.row === 'sum') {
-				return (cell.value = this.score.upper);
+			if (cell.row === 'upper-sum') {
+				cell.element.textContent = this.score.upper;
 			}
-			cell.value = this.score.bonus;
+			cell.element.textContent = this.score.bonus;
 		});
 	}
-
 	displayTotal() {
-		this.sections.total[0].value = this.score.total;
+		this.sections.total[0].element.textContent = this.score.total;
+	}
+	roll() {
+		return this.dice.map(die => die.roll());
 	}
 	/**
 	 * @param {Function} [onCellSelect]
 	 */
-	async roll(onCellSelect = null) {
-		if (this.rollsLeft >= 1) this.rollsLeft--;
-		this.currentDiceValues = await this.dice.animateRoll();
+	async animatedRoll(onCellSelect = null, interval = 100, timeout = 500) {
+		const dice = this.dice.filter(die => !die.isLocked);
+		if (!dice.length || this.isRolling || this.rollsLeft < 1) {
+			return this.diceValues;
+		}
+		this.rollsLeft--;
+
+		const randomOffset = max => {
+			return Math.round(Math.random() * max * 2) - max;
+		};
+
+		let intervalID = setInterval(() => {
+			dice.forEach(die => {
+				const x = randomOffset(4),
+					y = randomOffset(4),
+					deg = randomOffset(8);
+				die.element.style.transform = `translate(${x}px,${y}px) rotate(${deg}deg)`;
+				die.roll();
+			});
+		}, interval);
+
+		await new Promise(resolve => {
+			setTimeout(() => {
+				clearInterval(intervalID);
+				dice.forEach(die => {
+					die.element.style.transform = null;
+					die.element.style.transition = null;
+				});
+				this.isRolling = false;
+				resolve(this.roll());
+			}, timeout);
+		});
+
 		this.resetColumnState();
 		this.setCurrent();
-		const diceScore = calculateDiceScore(this.currentDiceValues);
-		const cells = this.availableCells;
-		if (!cells.length) return;
-		const options = cells.filter(cell => {
-			return diceScore[cell.camelCaseRow] !== 0;
-		});
+		const [diceScore, options] = this.diceScore;
+
 		const getListener = (cell, value) => {
 			return () => {
 				cell.value = value;
@@ -111,18 +158,19 @@ export default class Player {
 			};
 		};
 		if (!options.length && this.rollsLeft < 1) {
-			cells.forEach(cell => {
+			this.availableCells.forEach(cell => {
 				cell.setTempValue(cell.disabledValue);
 				cell.element.classList.add('disable');
 				cell.setClickListener(getListener(cell, cell.disabledValue));
 			});
-			return;
+		} else {
+			options.forEach(cell => {
+				const value = diceScore[cell.scoreKey];
+				cell.setTempValue(value);
+				cell.element.classList.add('option');
+				cell.setClickListener(getListener(cell, value));
+			});
 		}
-		options.forEach(cell => {
-			const value = diceScore[cell.camelCaseRow];
-			cell.setTempValue(value);
-			cell.element.classList.add('option');
-			cell.setClickListener(getListener(cell, value));
-		});
+		return [diceScore, options];
 	}
 }
