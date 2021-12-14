@@ -85,7 +85,7 @@ UI.startForm.form.addEventListener('submit', ev => {
 	updateDiceState();
 
 	UI.buttons.roll.addEventListener('click', async () => {
-		if (GAME.finished) return;
+		if (GAME.finished || !DICE.unlocked.length) return;
 		UI.buttons.roll.disabled = true;
 		const player = PLAYERS.currentPlayer;
 		await player.roll(onCellSelect);
@@ -100,6 +100,6 @@ DICE.forEach(die => {
 		if (die.element.classList.contains('disabled')) return;
 		die.isLocked = !die.isLocked;
 		UI.buttons.roll.disabled =
-			DICE.unlocked.length === 0 && PLAYERS.currentPlayer.rollsLeft >= 1;
+			DICE.unlocked.length === 0 || PLAYERS.currentPlayer.rollsLeft >= 1;
 	});
 });
