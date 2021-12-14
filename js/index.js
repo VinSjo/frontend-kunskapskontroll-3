@@ -5,12 +5,37 @@ import Player from './classes/Player.js';
 
 START_FORM.addFieldset();
 
+function updateRollsLeftText() {
+	UI.rollsLeftText.textContent = `Rolls left: ${PLAYERS.currentPlayer.rollsLeft}`;
+}
+
+function updateCurrentPlayer() {
+	const player = PLAYERS.currentPlayer;
+	player.setCurrent();
+	UI.currentPlayerText.textContent = `Current player: ${player.name}`;
+}
+
+function updateDiceState() {
+	const player = PLAYERS.currentPlayer;
+	const gameOver = GAME.finished;
+	DICE.forEach(die => {
+		if (gameOver || player.rollsLeft >= 3) {
+			die.isLocked = false;
+			die.element.classList.add('disabled');
+			return;
+		}
+		die.element.classList.remove('disabled');
+	});
+}
+
 function onRoundChange() {
+	updateDiceState();
 	if (GAME.finished) return;
 	GAME.round++;
 }
 
 function onCellSelect(player) {
+	player.rollsLeft = 3;
 	PLAYERS.nextPlayer(onRoundChange);
 	DICE.reset();
 	if (GAME.finished) {
@@ -22,12 +47,12 @@ function onCellSelect(player) {
 			if (!winner || player.total > winner.total) winner = player;
 		});
 		winner.setWinner();
-		console.log('Winner: ' + winner.name);
+		UI.currentPlayer.textContent = `Winner: ${winner.name}`;
 		return;
 	}
-	PLAYERS.currentPlayer.setCurrent();
 	UI.buttons.roll.disabled = false;
-	player.rollsLeft = 3;
+	updateCurrentPlayer();
+	updateRollsLeftText();
 }
 
 UI.buttons.form.addField.addEventListener('click', () => {
@@ -55,22 +80,24 @@ UI.startForm.form.addEventListener('submit', ev => {
 		PLAYERS.push(new Player(player.id, player.name, tableColumn, DICE));
 	});
 
+	START_FORM.closeAndRemove();
+	updateCurrentPlayer();
+	updateDiceState();
+
 	UI.buttons.roll.addEventListener('click', async () => {
 		if (GAME.finished) return;
 		UI.buttons.roll.disabled = true;
 		const player = PLAYERS.currentPlayer;
 		await player.roll(onCellSelect);
 		if (player.rollsLeft >= 1) UI.buttons.roll.disabled = false;
-		console.log('rollsLeft: ' + player.rollsLeft);
+		updateRollsLeftText();
+		updateDiceState();
 	});
-
-	START_FORM.closeAndRemove();
-	PLAYERS.currentPlayer.setCurrent();
 });
 
 DICE.forEach(die => {
 	die.element.addEventListener('click', () => {
-		if (PLAYERS.currentPlayer.rollsLeft >= 3 && !die.isLocked) return;
+		if (die.element.classList.contains('disabled')) return;
 		die.isLocked = !die.isLocked;
 		UI.buttons.roll.disabled =
 			DICE.unlocked.length === 0 && PLAYERS.currentPlayer.rollsLeft >= 1;

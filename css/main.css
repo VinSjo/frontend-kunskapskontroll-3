@@ -7,12 +7,13 @@
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
+	/* box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.5); */
 }
 body {
 	width: 100vw;
 	min-height: 100vh;
 	display: grid;
-	grid-template-rows: 3rem auto;
+	grid-template-rows: 2rem auto;
 	align-items: center;
 	justify-items: center;
 }
@@ -29,46 +30,63 @@ header {
 main {
 	opacity: 0;
 	display: grid;
-	grid-template: 1fr / repeat(2, 1fr);
+	grid-template: 2rem 1fr / 1fr 8ch;
+	grid-template-areas:
+		'info roll-button'
+		'score dice';
 	gap: 2rem;
-	padding: 2rem;
 	transition: var(--opacity-transition);
 }
 
+main > section {
+	height: 100%;
+	width: 100%;
+}
+section.info {
+	grid-area: info;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.5rem;
+	align-items: center;
+	justify-items: center;
+}
+
+.rolls-left,
+.current-player {
+	height: 100%;
+	width: 100%;
+	min-width: 25ch;
+}
+
+button.roll {
+	grid-area: roll-button;
+	width: 100%;
+}
+
+section.score {
+	grid-area: score;
+}
+
 section.dice {
-	justify-self: end;
+	grid-area: dice;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
-	max-width: 5rem;
-}
-
-section.score {
-	height: 100%;
-	width: 100%;
-}
-
-button.roll {
-	width: 100%;
-	margin-top: 2rem;
 }
 
 .dice-container {
 	height: 100%;
-	width: fit-content;
-	padding: 0 1rem;
-	display: grid;
-	grid-template-rows: repeat(5, 1fr);
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 	align-items: center;
-	justify-items: center;
-	gap: 1rem;
-	align-self: right;
 }
 .dice-icon {
-	width: auto;
-	max-width: 4rem;
-	height: 100%;
+	width: 100%;
+	height: auto;
 	transition: var(--transform-transition);
 }
 
@@ -81,7 +99,7 @@ button.roll {
 	transform: translateX(-25%);
 }
 
-.dice-icon:not(.locked) {
+.dice-icon:not(.disabled) {
 	cursor: pointer;
 }
 
@@ -90,7 +108,7 @@ button.roll {
 	border-collapse: collapse;
 	height: 100%;
 	width: 100%;
-	max-width: 450px;
+	/* max-width: 450px; */
 }
 
 .score-table th,
@@ -98,6 +116,7 @@ button.roll {
 	padding: 0.2em 0.5em;
 	border-width: 1px;
 	border-style: solid;
+	min-width: 15ch;
 }
 
 .score-table td.current.option,

@@ -40,79 +40,12 @@
         </section>
     </aside>
     <main>
-        <section class="dice">
-            <div class="dice-container">
-                <svg class="dice-icon" width="64" height="64"
-                    viewBox="0 0 64 64" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <rect class="dice-body" x="1.5" y="1.5" width="61"
-                        height="61" rx="6.5" stroke-width="3" />
-                    <circle class="dice-dot" cx="14" cy="14" r="6" />
-                    <circle class="dice-dot" cx="50" cy="14" r="6" />
-                    <circle class="dice-dot" cx="14" cy="32" r="6" />
-                    <circle class="dice-dot" cx="32" cy="32" r="6" />
-                    <circle class="dice-dot" cx="50" cy="32" r="6" />
-                    <circle class="dice-dot" cx="14" cy="50" r="6" />
-                    <circle class="dice-dot" cx="50" cy="50" r="6" />
-                </svg>
-                <svg class="dice-icon" width="64" height="64"
-                    viewBox="0 0 64 64" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <rect class="dice-body" x="1.5" y="1.5" width="61"
-                        height="61" rx="6.5" stroke-width="3" />
-                    <circle class="dice-dot" cx="14" cy="14" r="6" />
-                    <circle class="dice-dot" cx="50" cy="14" r="6" />
-                    <circle class="dice-dot" cx="14" cy="32" r="6" />
-                    <circle class="dice-dot" cx="32" cy="32" r="6" />
-                    <circle class="dice-dot" cx="50" cy="32" r="6" />
-                    <circle class="dice-dot" cx="14" cy="50" r="6" />
-                    <circle class="dice-dot" cx="50" cy="50" r="6" />
-                </svg>
-                <svg class="dice-icon" width="64" height="64"
-                    viewBox="0 0 64 64" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <rect class="dice-body" x="1.5" y="1.5" width="61"
-                        height="61" rx="6.5" stroke-width="3" />
-                    <circle class="dice-dot" cx="14" cy="14" r="6" />
-                    <circle class="dice-dot" cx="50" cy="14" r="6" />
-                    <circle class="dice-dot" cx="14" cy="32" r="6" />
-                    <circle class="dice-dot" cx="32" cy="32" r="6" />
-                    <circle class="dice-dot" cx="50" cy="32" r="6" />
-                    <circle class="dice-dot" cx="14" cy="50" r="6" />
-                    <circle class="dice-dot" cx="50" cy="50" r="6" />
-                </svg>
-                <svg class="dice-icon" width="64" height="64"
-                    viewBox="0 0 64 64" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <rect class="dice-body" x="1.5" y="1.5" width="61"
-                        height="61" rx="6.5" stroke-width="3" />
-                    <circle class="dice-dot" cx="14" cy="14" r="6" />
-                    <circle class="dice-dot" cx="50" cy="14" r="6" />
-                    <circle class="dice-dot" cx="14" cy="32" r="6" />
-                    <circle class="dice-dot" cx="32" cy="32" r="6" />
-                    <circle class="dice-dot" cx="50" cy="32" r="6" />
-                    <circle class="dice-dot" cx="14" cy="50" r="6" />
-                    <circle class="dice-dot" cx="50" cy="50" r="6" />
-                </svg>
-                <svg class="dice-icon" width="64" height="64"
-                    viewBox="0 0 64 64" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <rect class="dice-body" x="1.5" y="1.5" width="61"
-                        height="61" rx="6.5" stroke-width="3" />
-                    <circle class="dice-dot" cx="14" cy="14" r="6" />
-                    <circle class="dice-dot" cx="50" cy="14" r="6" />
-                    <circle class="dice-dot" cx="14" cy="32" r="6" />
-                    <circle class="dice-dot" cx="32" cy="32" r="6" />
-                    <circle class="dice-dot" cx="50" cy="32" r="6" />
-                    <circle class="dice-dot" cx="14" cy="50" r="6" />
-                    <circle class="dice-dot" cx="50" cy="50" r="6" />
-                </svg>
-            </div>
-            <button class="roll">Roll</button>
+        <section class="info">
+            <p class="current-player"></p>
+            <p class="rolls-left"></p>
         </section>
+        <button class="roll">Roll</button>
         <section class="score">
-
-
             <table class="score-table">
                 <thead class="players">
                     <tr class="player-names">
@@ -182,6 +115,68 @@
                     </tr>
                 </tfoot>
             </table>
+        </section>
+        <section class="dice">
+            <svg class="dice-icon" width="64" height="64" viewBox="0 0 64 64"
+                fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect class="dice-body" x="1.5" y="1.5" width="61" height="61"
+                    rx="6.5" stroke-width="3" />
+                <circle class="dice-dot" cx="14" cy="14" r="6" />
+                <circle class="dice-dot" cx="50" cy="14" r="6" />
+                <circle class="dice-dot" cx="14" cy="32" r="6" />
+                <circle class="dice-dot" cx="32" cy="32" r="6" />
+                <circle class="dice-dot" cx="50" cy="32" r="6" />
+                <circle class="dice-dot" cx="14" cy="50" r="6" />
+                <circle class="dice-dot" cx="50" cy="50" r="6" />
+            </svg>
+            <svg class="dice-icon" width="64" height="64" viewBox="0 0 64 64"
+                fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect class="dice-body" x="1.5" y="1.5" width="61" height="61"
+                    rx="6.5" stroke-width="3" />
+                <circle class="dice-dot" cx="14" cy="14" r="6" />
+                <circle class="dice-dot" cx="50" cy="14" r="6" />
+                <circle class="dice-dot" cx="14" cy="32" r="6" />
+                <circle class="dice-dot" cx="32" cy="32" r="6" />
+                <circle class="dice-dot" cx="50" cy="32" r="6" />
+                <circle class="dice-dot" cx="14" cy="50" r="6" />
+                <circle class="dice-dot" cx="50" cy="50" r="6" />
+            </svg>
+            <svg class="dice-icon" width="64" height="64" viewBox="0 0 64 64"
+                fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect class="dice-body" x="1.5" y="1.5" width="61" height="61"
+                    rx="6.5" stroke-width="3" />
+                <circle class="dice-dot" cx="14" cy="14" r="6" />
+                <circle class="dice-dot" cx="50" cy="14" r="6" />
+                <circle class="dice-dot" cx="14" cy="32" r="6" />
+                <circle class="dice-dot" cx="32" cy="32" r="6" />
+                <circle class="dice-dot" cx="50" cy="32" r="6" />
+                <circle class="dice-dot" cx="14" cy="50" r="6" />
+                <circle class="dice-dot" cx="50" cy="50" r="6" />
+            </svg>
+            <svg class="dice-icon" width="64" height="64" viewBox="0 0 64 64"
+                fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect class="dice-body" x="1.5" y="1.5" width="61" height="61"
+                    rx="6.5" stroke-width="3" />
+                <circle class="dice-dot" cx="14" cy="14" r="6" />
+                <circle class="dice-dot" cx="50" cy="14" r="6" />
+                <circle class="dice-dot" cx="14" cy="32" r="6" />
+                <circle class="dice-dot" cx="32" cy="32" r="6" />
+                <circle class="dice-dot" cx="50" cy="32" r="6" />
+                <circle class="dice-dot" cx="14" cy="50" r="6" />
+                <circle class="dice-dot" cx="50" cy="50" r="6" />
+            </svg>
+            <svg class="dice-icon" width="64" height="64" viewBox="0 0 64 64"
+                fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect class="dice-body" x="1.5" y="1.5" width="61" height="61"
+                    rx="6.5" stroke-width="3" />
+                <circle class="dice-dot" cx="14" cy="14" r="6" />
+                <circle class="dice-dot" cx="50" cy="14" r="6" />
+                <circle class="dice-dot" cx="14" cy="32" r="6" />
+                <circle class="dice-dot" cx="32" cy="32" r="6" />
+                <circle class="dice-dot" cx="50" cy="32" r="6" />
+                <circle class="dice-dot" cx="14" cy="50" r="6" />
+                <circle class="dice-dot" cx="50" cy="50" r="6" />
+            </svg>
         </section>
     </main>
 
