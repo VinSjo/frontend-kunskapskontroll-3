@@ -64,15 +64,14 @@ export default class AiPlayer extends Player {
 		const key = selectedCell.scoreKey;
 		const threshold =
 			this.availableCells.length / Object.keys(score.dice).length || 1;
-		console.log('threshold: ' + threshold);
 		if (
 			score.dice[key] < score.max[key] * threshold &&
 			this.rollsLeft >= 1
 		) {
 			const newRoll = await this.automateTurn(
 				onRollClick,
-				onDieClick,
-				onCellSelect
+				onCellSelect,
+				selectTimeout
 			);
 			return await new Promise(resolve => {
 				setTimeout(() => {

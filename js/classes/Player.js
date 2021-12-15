@@ -130,6 +130,10 @@ export default class Player {
 			return Math.round(Math.random() * max * 2) - max;
 		};
 
+		dice.forEach(die => {
+			die.element.style.transition = `transform ${interval / 2} linear`;
+		});
+
 		let intervalID = setInterval(() => {
 			dice.forEach(die => {
 				const x = randomOffset(4),
