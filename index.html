@@ -23,6 +23,7 @@
     <header>
         <h1 class="page-title">Yatzy</h1>
     </header>
+    <!-- MODAL POPUP -->
     <aside class="start-modal">
         <section class="modal-content">
             <div class="modal-header">
@@ -39,12 +40,16 @@
             </form>
         </section>
     </aside>
+
     <main>
+        <!-- INFO ABOUT CURRENT PLAYER AND ROLLS LEFT -->
         <section class="info">
             <p class="current-player"></p>
             <p class="rolls-left"></p>
         </section>
+        <!-- ROLL BUTTON -->
         <button class="roll">Roll</button>
+        <!-- SCORE TABLE -->
         <section class="score">
             <table class="score-table">
                 <thead class="players">
@@ -116,6 +121,9 @@
                 </tfoot>
             </table>
         </section>
+
+        <!-- DICE CONTAINER -->
+
         <section class="dice">
             <svg class="dice-icon" width="64" height="64" viewBox="0 0 64 64"
                 fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -180,8 +188,7 @@
         </section>
     </main>
 
-
-
+    <!-- TEMPLATE FOR PLAYER INPUT -->
     <template id="player-fieldset">
         <fieldset class="player-fields" id="player-1">
             <input class="name-input" type="text" id="playername-1"

@@ -96,7 +96,7 @@ section.dice {
 }
 
 .dice-icon.locked {
-	transform: translateX(-25%);
+	transform: translateX(20%);
 }
 
 .dice-icon:not(.disabled) {
@@ -155,7 +155,7 @@ section.dice {
 	transition: opacity 0.25s ease-in, transform 0.25s ease-in;
 }
 
-.start-modal.hidden {
+.start-modal.closed {
 	opacity: 0;
 	transform: scale(0);
 }

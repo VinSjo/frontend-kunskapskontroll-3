@@ -1,5 +1,5 @@
 import UI from './setup/ui.js';
-import { GAME, DICE, PLAYERS, START_FORM } from './setup/setup.js';
+import { GAME, DICE, START_FORM } from './setup/setup.js';
 import ScoreTableCell from './classes/ScoreTableCell.js';
 import Player from './classes/Player.js';
 import AiPlayer from './classes/AiPlayer.js';
@@ -7,90 +7,7 @@ import Die from './classes/Die.js';
 
 START_FORM.addFieldset();
 
-function resetDice() {
-	DICE.forEach(die => {
-		die.isLocked = false;
-		die.value = 1;
-	});
-}
-
-function updateRollsLeftText() {
-	UI.rollsLeftText.textContent = `Rolls left: ${PLAYERS.currentPlayer.rollsLeft}`;
-}
-
-async function updateCurrentPlayer() {
-	const player = PLAYERS.currentPlayer;
-	player.setCurrent();
-	UI.currentPlayerText.textContent = `Current: ${player.name}`;
-	if (player.type !== 'human') {
-		await player.automateTurn(onRollClick, onDieClick, onCellSelect);
-	}
-}
-
-function updateDiceState() {
-	const player = PLAYERS.currentPlayer;
-	const gameOver = GAME.finished;
-	DICE.forEach(die => {
-		if (gameOver || player.rollsLeft >= 3) {
-			die.isLocked = false;
-			die.element.classList.add('disabled');
-			return;
-		}
-		die.element.classList.remove('disabled');
-	});
-}
-
-async function onRollClick() {
-	const unlockedDice = DICE.filter(die => !die.isLocked);
-	if (GAME.finished || !unlockedDice) return;
-	UI.buttons.roll.disabled = true;
-	const player = PLAYERS.currentPlayer;
-	await player.animatedRoll(onCellSelect);
-	if (player.rollsLeft >= 1) UI.buttons.roll.disabled = false;
-	updateRollsLeftText();
-	updateDiceState();
-}
-
-/**
- * @param {Die} die
- */
-function onDieClick(die) {
-	if (die.element.classList.contains('disabled')) return;
-	die.isLocked = !die.isLocked;
-	const unlockedDice = DICE.filter(die => !die.unlocked).length;
-	UI.buttons.roll.disabled =
-		unlockedDice === 0 || PLAYERS.currentPlayer.rollsLeft < 1;
-}
-
-function onRoundChange() {
-	if (GAME.finished) return;
-	GAME.round++;
-}
-/**
- * @param {Player} player
- */
-function onCellSelect(player) {
-	player.rollsLeft = 3;
-	PLAYERS.nextPlayer(onRoundChange);
-	resetDice();
-	if (GAME.finished) {
-		UI.buttons.roll.disabled = true;
-		let winner = null;
-		PLAYERS.forEach(player => {
-			player.displaySum();
-			player.displayTotal();
-			if (!winner || player.total > winner.total) winner = player;
-		});
-		winner.setWinner();
-		UI.currentPlayerText.textContent = `Winner: ${winner.name}`;
-		UI.rollsLeftText.textContent = null;
-		return;
-	}
-	UI.buttons.roll.disabled = false;
-	updateCurrentPlayer();
-	updateRollsLeftText();
-}
-
+//#region EVENT LISTENERS - HANDLES INTERACTION AND STARTS THE GAME
 UI.buttons.form.addField.addEventListener('click', () => {
 	START_FORM.addFieldset();
 });
@@ -117,11 +34,17 @@ UI.startForm.form.addEventListener('submit', ev => {
 			set.type === 'human'
 				? new Player(set.id, set.name, tableColumn, DICE)
 				: new AiPlayer(set.id, set.name, tableColumn, DICE);
-		PLAYERS.push(player);
+		GAME.players.push(player);
 	});
 
-	UI.buttons.roll.addEventListener('click', onRollClick);
-
+	UI.buttons.roll.addEventListener('click', async () => {
+		if (GAME.currentPlayer.type !== 'human') return;
+		await onRollClick();
+	});
+	document.addEventListener('keydown', ev => {
+		if (ev.key !== ' ') return;
+		UI.buttons.roll.dispatchEvent(new Event('click'));
+	});
 	START_FORM.closeAndRemove();
 	updateCurrentPlayer();
 	updateDiceState();
@@ -133,3 +56,95 @@ DICE.forEach(die => {
 		onDieClick(die);
 	});
 });
+
+//#endregion
+
+//#region FUNCTIONS - HANDLES GAME FLOW
+function resetDice() {
+	DICE.forEach(die => {
+		die.isLocked = false;
+		die.value = 1;
+	});
+}
+
+function updateRollsLeftText() {
+	UI.rollsLeftText.textContent = `Rolls left: ${GAME.currentPlayer.rollsLeft}`;
+}
+
+async function updateCurrentPlayer() {
+	const player = GAME.currentPlayer;
+	player.setCurrent();
+	UI.currentPlayerText.textContent = `Current: ${player.name}`;
+	if (player.type !== 'human') {
+		await player.automateTurn(onRollClick, onCellSelect, onDieClick);
+	}
+}
+
+function updateDiceState() {
+	const player = GAME.currentPlayer;
+	const gameOver = GAME.finished;
+	DICE.forEach(die => {
+		if (gameOver || player.rollsLeft >= 3) {
+			die.isLocked = false;
+			die.element.classList.add('disabled');
+			return;
+		}
+		die.element.classList.remove('disabled');
+	});
+}
+
+async function onRollClick() {
+	const unlockedDice = DICE.filter(die => !die.isLocked);
+	if (GAME.finished || !unlockedDice.length) return;
+	UI.buttons.roll.disabled = true;
+	const player = GAME.currentPlayer;
+	await player.animatedRoll(onCellSelect);
+	if (player.rollsLeft >= 1) UI.buttons.roll.disabled = false;
+	updateRollsLeftText();
+	updateDiceState();
+}
+
+/**
+ * @param {Die} die
+ */
+function onDieClick(die) {
+	if (die.element.classList.contains('disabled')) return;
+	die.isLocked = !die.isLocked;
+	const unlockedDice = DICE.filter(die => !die.unlocked).length;
+	UI.buttons.roll.disabled =
+		unlockedDice === 0 || GAME.currentPlayer.rollsLeft < 1;
+}
+/**
+ * @param {Player} player
+ */
+function onCellSelect(player) {
+	player.rollsLeft = 3;
+	GAME.nextPlayer();
+	resetDice();
+	if (GAME.finished) {
+		UI.buttons.roll.disabled = true;
+		GAME.players.sort((previous, current) => {
+			const prevScore = previous.score.total;
+			const currScore = current.score.total;
+			return prevScore === currScore ? 0 : prevScore < currScore ? 1 : -1;
+		});
+		const winners = [];
+		GAME.players.forEach((player, i) => {
+			player.displaySum();
+			player.displayTotal();
+			if (i === 0 || player.score.total === GAME.players[0].score.total) {
+				player.setWinner();
+				winners.push(player.name);
+			}
+		});
+		UI.currentPlayerText.textContent =
+			(winners.length > 1 ? 'Winners: ' : 'Winner: ') +
+			winners.join(', ');
+		return;
+	}
+	UI.buttons.roll.disabled = false;
+	updateCurrentPlayer();
+	updateRollsLeftText();
+}
+
+//#endregion

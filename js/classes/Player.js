@@ -1,6 +1,10 @@
 import Die from './Die.js';
 import ScoreTableCell from './ScoreTableCell.js';
 import { calculateDiceScore } from '../functions/calculations.js';
+
+/**
+ * Class used for the game's players
+ */
 export default class Player {
 	/**
 	 * @param {String} id

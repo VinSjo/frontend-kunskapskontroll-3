@@ -1,10 +1,10 @@
 import Player from './Player.js';
-import ScoreTableCell from './ScoreTableCell.js';
-import {
-	calculateDiceScore,
-	getMaxDiceScore,
-} from '../functions/calculations.js';
+import { getMaxDiceScore } from '../functions/calculations.js';
 
+/**
+ * A subclass of Player that adds methods used to automate gameplay
+ * @see {@link Player}
+ */
 export default class AiPlayer extends Player {
 	/**
 	 * @param {String} id
@@ -50,49 +50,40 @@ export default class AiPlayer extends Player {
 		});
 	}
 
-	// /**
-	//  * @param {HTMLButtonElement} rollButton
-	//  * @param {Function} onCellSelect
-	//  * @param {Function} onRoll
-	//  * @param {Number} rollInterval
-	//  * @param {Number} timeout
-	//  */
-	// async automateTurn(rollButton, timeout = 1000) {
-	// 	await new Promise(resolve => {
-	// 		let intervalID = setInterval(() => {
-	// 			if (this.isRolling) return;
-	// 			if (rollButton.disabled || this.rollsLeft < 1) {
-	// 				clearInterval(intervalID);
-	// 				intervalID = null;
-	// 				resolve();
-	// 				return;
-	// 			}
-	// 			rollButton.dispatchEvent(new Event('click'));
-	// 		}, timeout);
-	// 	});
-	// 	const selectedCell = this.getBestOption();
-
-	// 	return await new Promise(resolve =>
-	// 		setTimeout(() => {
-	// 			resolve(selectedCell.element.dispatchEvent(new Event('click')));
-	// 		}, timeout * 0.5)
-	// 	);
-	// }
-
 	/**
+	 *
+	 *
 	 * @param {Function} onRollClick
 	 * @param {Function} onDieClick
-	 *@param {Function} onCellSelect
+	 * @param {Function} onCellSelect
 	 */
-	async automateTurn(onRollClick, onDieClick, onCellSelect) {
+	async automateTurn(
+		onRollClick,
+		onCellSelect,
+		onDieClick,
+		selectTimeout = 500
+	) {
 		await onRollClick();
 		const score = this.scoreData;
 		const selectedCell = this.getBestOption();
 		const key = selectedCell.scoreKey;
-		const diff = score.diff[key];
-		const max = score.max[key];
-		if (diff > max * 0.2 && this.rollsLeft >= 1) {
-			return await this.automateTurn(onRollClick, onDieClick);
+		const threshold =
+			this.availableCells.length / Object.keys(score.dice).length || 1;
+		console.log('threshold: ' + threshold);
+		if (
+			score.dice[key] < score.max[key] * threshold &&
+			this.rollsLeft >= 1
+		) {
+			const newRoll = await this.automateTurn(
+				onRollClick,
+				onDieClick,
+				onCellSelect
+			);
+			return await new Promise(resolve => {
+				setTimeout(() => {
+					resolve(newRoll);
+				}, selectTimeout);
+			});
 		}
 		return await new Promise(resolve =>
 			setTimeout(() => {
@@ -100,12 +91,11 @@ export default class AiPlayer extends Player {
 					resolve(selectedCell.clickListener());
 					return;
 				}
-
-				const diceScore = score.diceScore[key];
-				selectedCell.value = diceScore || selectedCell.disabledValue;
+				selectedCell.value =
+					score.dice[key] || selectedCell.disabledValue;
 				this.resetColumnState();
 				resolve(onCellSelect ? onCellSelect(this) : true);
-			}, 50)
+			}, selectTimeout)
 		);
 	}
 }

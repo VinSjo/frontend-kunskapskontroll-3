@@ -1,3 +1,6 @@
+/**
+ * Holds references to all global DOM-elements used in the program
+ */
 const UI = {
 	main: document.querySelector('main'),
 	scoreTable: document.querySelector('.score-table'),

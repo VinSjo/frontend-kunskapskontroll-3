@@ -1,90 +1,8 @@
-/**
- * @param {Number[]} values
- * @returns {Number[]}
- */
-function getOccurrences(values) {
-	const occurrences = [0, 0, 0, 0, 0, 0];
-	values.forEach(value => {
-		const i = value - 1;
-		occurrences[i]++;
-	});
-	return occurrences;
-}
+// This file contains functions used to calculate yatzy-score
 
 /**
- * @param {Number[]} occurrences
- * @param {Number} minCount
- * @returns {Number[]}
+ * Creates a template for holding yatzy-scores
  */
-function filterByOccurance(occurrences, minCount) {
-	return occurrences.reduce((arr, count, index) => {
-		if (count >= minCount) arr.push(index + 1);
-		return arr;
-	}, []);
-}
-
-/**
- *
- * @param {Number[]} occurrences
- * @returns {Number[]}
- */
-function getPairs(occurrences) {
-	return Math.max(...occurrences) < 2
-		? []
-		: filterByOccurance(occurrences, 2);
-}
-
-/**
- * @param {Number[]} occurrences
- * @returns {Number}
- */
-function getThreeOfKind(occurrences) {
-	return Math.max(...occurrences) < 3
-		? 0
-		: filterByOccurance(occurrences, 3)[0] * 3;
-}
-/**
- * @param {Number[]} occurrences
- * @returns {Number}
- */
-function getFourOfKind(occurrences) {
-	return Math.max(...occurrences) < 4
-		? 0
-		: filterByOccurance(occurrences, 4)[0] * 4;
-}
-/**
- * @param {Number[]} occurrences
- * @returns {Number}
- */
-function getYatzy(occurrences) {
-	return occurrences.includes(5) ? 50 : 0;
-}
-
-/**
- * @param {Number[]} occurrences
- * @returns {Number}
- */
-function getFullHouse(occurrences) {
-	const pairs = getPairs(occurrences);
-	const threeOfKind = getThreeOfKind(occurrences);
-	const uniquePair = pairs.filter(pair => pair !== threeOfKind / 3);
-	if (!pairs.length || !threeOfKind || !uniquePair.length) return 0;
-	return uniquePair[0] * 2 + threeOfKind;
-}
-/**
- * @param {Number[]} values
- * @param {Number} start
- * @returns {Number}
- */
-function getStraight(values, start = 1) {
-	let points = 0;
-	for (let i = start; i < start + 5; i++) {
-		if (!values.includes(i)) return 0;
-		points += i;
-	}
-	return points;
-}
-
 function scoreTemplate() {
 	return {
 		one: 0,
@@ -104,37 +22,91 @@ function scoreTemplate() {
 		yatzy: 0,
 	};
 }
+
 /**
+ * Get number of occurrences in an array of numbers for each integer between
+ * 1 and 6
+ *
+ * @param {Number[]} diceValues - array of dice values
+ * @returns {Number[]}
+ */
+function getOccurrences(diceValues) {
+	const occurrences = [0, 0, 0, 0, 0, 0];
+	diceValues.forEach(value => {
+		const i = value - 1;
+		occurrences[i]++;
+	});
+	return occurrences;
+}
+
+/**
+ * Calculates score based on 5 dice values, returns a scoreTemplate with
+ * the result
  *
  * @param {Number[]} diceValues
+ * @returns {Object} - scoreTemplate with the result
+ * @see {@link scoreTemplate}
  */
 function calculateDiceScore(diceValues) {
-	const occurrences = getOccurrences(diceValues);
+	const occ = getOccurrences(diceValues);
+	function getSameNumber(minCount) {
+		const max = Math.max(...occ);
+		const num = max < minCount ? 0 : occ.indexOf(max) + 1;
+		return num;
+	}
+	function getStraight(first) {
+		let points = 0;
+		for (let i = first; i < first + diceValues.length; i++) {
+			if (!diceValues.includes(i)) return 0;
+			points += i;
+		}
+		return points;
+	}
+
 	const score = scoreTemplate();
-	score.one = occurrences[0];
-	score.two = occurrences[1] * 2;
-	score.three = occurrences[2] * 3;
-	score.four = occurrences[3] * 4;
-	score.five = occurrences[4] * 5;
-	score.six = occurrences[5] * 6;
+	score.one = occ[0];
+	score.two = occ[1] * 2;
+	score.three = occ[2] * 3;
+	score.four = occ[3] * 4;
+	score.five = occ[4] * 5;
+	score.six = occ[5] * 6;
 	score.smallStraight = getStraight(diceValues, 1);
 	score.largeStraight = getStraight(diceValues, 2);
 	score.chance = diceValues.reduce((sum, value) => sum + value, 0);
-	const pairs = getPairs(occurrences);
-	if (pairs.length < 1) return score;
+	if (Math.max(...occ) < 2) return score;
+	const pairs = [];
+
+	occ.forEach((count, i) => {
+		if (count < 2) return;
+		const num = i + 1;
+		pairs.push(num);
+	});
 
 	score.pair = Math.max(...pairs) * 2;
-	score.threeOfKind = getThreeOfKind(occurrences);
-	score.fourOfKind = getFourOfKind(occurrences);
-	score.yatzy = getYatzy(occurrences);
+	score.threeOfKind = getSameNumber(occ, 3) * 3;
+	score.fourOfKind = getSameNumber(occ, 4) * 4;
+	score.yatzy = Math.max(...occ) === 5 ? 50 : 0;
 
 	if (pairs.length > 1) {
 		score.twoPair = (pairs[0] + pairs[1]) * 2;
-		score.fullHouse = getFullHouse(occurrences);
+		if (score.threeOfKind) {
+			const roof = getSameNumber(occ, 3);
+			const base = pairs.reduce((num, current) => {
+				return num === roof ? current : num;
+			});
+			score.fullHouse = roof * 3 + base * 2;
+		}
 	}
+
 	return score;
 }
 
+/**
+ * Get the maximum possible yatzy score for all fields
+ *
+ * @returns {Object} - scoreTemplate with the max possible score for each field
+ * @see {@link scoreTemplate}
+ */
 function getMaxDiceScore() {
 	const score = scoreTemplate();
 	score.one = 5;
@@ -143,29 +115,16 @@ function getMaxDiceScore() {
 	score.four = 4 * 5;
 	score.five = 5 * 5;
 	score.six = 6 * 5;
-
 	score.pair = 6 * 2;
 	score.twoPair = 6 * 2 + 5 * 2;
 	score.threeOfKind = 6 * 3;
 	score.fourOfKind = 6 * 4;
 	score.fullHouse = 6 * 3 + 5 * 2;
-	score.smallStraight = getStraight([1, 2, 3, 4, 5], 1);
-	score.largeStraight = getStraight([1, 2, 3, 4, 5], 1);
+	score.smallStraight = [1, 2, 3, 4, 5].reduce((sum, num) => sum + num);
+	score.largeStraight = [2, 3, 4, 5, 6].reduce((sum, num) => sum + num);
 	score.chance = 6 * 5;
 	score.yatzy = 50;
 	return score;
 }
 
-export {
-	getOccurrences,
-	filterByOccurance,
-	getPairs,
-	getThreeOfKind,
-	getFourOfKind,
-	getFullHouse,
-	getStraight,
-	getYatzy,
-	scoreTemplate,
-	calculateDiceScore,
-	getMaxDiceScore,
-};
+export { getOccurrences, scoreTemplate, calculateDiceScore, getMaxDiceScore };
