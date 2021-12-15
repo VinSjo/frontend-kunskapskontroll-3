@@ -26,6 +26,10 @@ export default class AiPlayer extends Player {
 		this.isPlaying = false;
 	}
 
+	/**
+	 * @property {Object} scoreData - gets diceScore, options, maxscore and
+	 * scoreDiff at once, to reduce repetition
+	 */
 	get scoreData() {
 		const [diceScore, options] = this.diceScore;
 		const maxScore = getMaxDiceScore();

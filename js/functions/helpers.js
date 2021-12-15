@@ -1,4 +1,6 @@
 /**
+ * Get a number between 1 and 9 as a word
+ *
  * @param {Number} number
  * @returns {String}
  */
@@ -18,6 +20,8 @@ function numberWord(number) {
 	return words[index];
 }
 /**
+ * Get a string where all characters is lowerCase except the first
+ *
  * @param {String} string
  * @returns {String}
  */

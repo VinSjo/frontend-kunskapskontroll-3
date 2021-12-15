@@ -21,8 +21,9 @@ export default class Player {
 		this.column = tableColumn;
 		this.rollsLeft = 3;
 		this.dice = dice;
-		this.type = 'human';
 		this.isRolling = false;
+		this.type = 'human';
+
 		const reduceSection = section => {
 			return section.reduce((sum, cell) => {
 				const val = cell.value;
@@ -52,7 +53,10 @@ export default class Player {
 		this.sections = sections;
 		this.score = score;
 	}
-
+	/**
+	 * @property {ScoreTableCell[]} availableCells - an array of all cells in
+	 * player's column that is empty
+	 */
 	get availableCells() {
 		return this.column.filter(
 			cell =>
@@ -61,11 +65,17 @@ export default class Player {
 				cell.row !== 'total'
 		);
 	}
-
+	/**
+	 * @property {Number[]} - get dice-values
+	 * @see {@link Player.dice}
+	 */
 	get diceValues() {
 		return this.dice.map(die => die.value);
 	}
-
+	/**
+	 * @property {Object[]} - gets current dice-score in available cells
+	 * and available options
+	 */
 	get diceScore() {
 		const available = this.availableCells;
 		const diceScore = calculateDiceScore(this.diceValues);
@@ -74,7 +84,12 @@ export default class Player {
 		});
 		return [diceScore, options];
 	}
-
+	/**
+	 * Reset the state of each cell in Players column, removes click-event
+	 * listeners and removes value if cell is not disabled (occupied)
+	 * @see {@link Player.column}
+	 * @see {@link ScoreTableCell.removeClickListener}
+	 */
 	resetColumnState() {
 		this.column.forEach(cell => {
 			cell.element.classList.remove('current');
@@ -86,18 +101,26 @@ export default class Player {
 			}
 		});
 	}
+	/**
+	 * Updates Player's column by adding classname "current" to all cell-elements
+	 */
 	setCurrent() {
 		this.column.forEach(cell => {
 			cell.element.classList.add('current');
 		});
 	}
-
+	/**
+	 * Updates Player's column by adding classname "winner" to all cell-elements
+	 */
 	setWinner() {
 		this.column.forEach(cell => {
 			cell.element.classList.add('winner');
 		});
 	}
-
+	/**
+	 * Displays sum of all cells in the upper section of Player's column and also
+	 * displays the bonus-score
+	 */
 	displaySum() {
 		const cells = this.sections.sum;
 		cells.forEach(cell => {
@@ -108,9 +131,17 @@ export default class Player {
 			cell.element.textContent = this.score.bonus;
 		});
 	}
+	/**
+	 * Displays the Player's total score in scoreTable;
+	 */
 	displayTotal() {
 		this.sections.total[0].element.textContent = this.score.total;
 	}
+	/**
+	 * Updates all values in Player's Die-array and returns all values
+	 * @returns {Number[]}
+	 * @see {@link Die.roll}
+	 */
 	roll() {
 		return this.dice.map(die => die.roll());
 	}

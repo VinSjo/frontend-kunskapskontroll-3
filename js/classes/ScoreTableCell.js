@@ -1,4 +1,5 @@
 import { firstCharToUpper } from '../functions/helpers.js';
+import { scoreTemplate } from '../functions/calculations.js';
 
 export default class ScoreTableCell {
 	/**
@@ -16,9 +17,18 @@ export default class ScoreTableCell {
 		this.tempValue = null;
 		this.disabledValue = '𐄂';
 	}
+	/**
+	 * @property {Boolean} - if cell's value is empty or not
+	 */
 	get disabled() {
 		return this.value !== null;
 	}
+	/**
+	 * @property {null|false|Number} - gets value in cell
+	 * if cell is empty: null
+	 * if cell is disabled: false
+	 * else: Number
+	 */
 	get value() {
 		const text = this.element.textContent;
 		return this.tempValue !== null || !text.length
@@ -31,6 +41,10 @@ export default class ScoreTableCell {
 		this.clearTempValue();
 		this.element.textContent = value || null;
 	}
+	/**
+	 * @property {String} - conversion of className to match keys in scoreTemplate
+	 * @see {@link scoreTemplate}
+	 */
 	get scoreKey() {
 		return this.row
 			.split('-')
@@ -40,20 +54,37 @@ export default class ScoreTableCell {
 			})
 			.join('');
 	}
+	/**
+	 * Set a temporary value in cell to display options
+	 * @param {Number | String} value
+	 */
 	setTempValue(value) {
 		this.tempValue = value;
 		this.element.textContent = value;
 	}
+	/**
+	 * removes the temporary value
+	 */
 	clearTempValue() {
 		if (this.tempValue === null) return;
 		this.tempValue = null;
 		this.element.textContent = null;
 	}
+	/**
+	 * Add an click-listener to cell-element and store it in
+	 * ScoreTableCell.clickListener
+	 * @param {Function} clickListener
+	 * @see {@link ScoreTableCell.clickListener}
+	 */
 	setClickListener(clickListener) {
 		if (this.clickListener) this.removeClickListener();
 		this.clickListener = clickListener;
 		this.element.addEventListener('click', this.clickListener);
 	}
+	/**
+	 * Removes the click-listener from cell
+	 * @see {@link ScoreTableCell.setClickListener}
+	 */
 	removeClickListener() {
 		if (!this.clickListener) return;
 		this.element.removeEventListener('click', this.clickListener);

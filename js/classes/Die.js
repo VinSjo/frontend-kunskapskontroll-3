@@ -5,6 +5,9 @@ export default class Die {
 	constructor(element) {
 		this.element = element;
 	}
+	/**
+	 * @property {Boolean} isLocked - if the die is locked or not
+	 */
 	get isLocked() {
 		return this.element.classList.contains('locked');
 	}
@@ -13,6 +16,10 @@ export default class Die {
 			? this.element.classList.add('locked')
 			: this.element.classList.remove('locked');
 	}
+	/**
+	 * @property {Number} value - gets die-value or sets die-value and updates
+	 * which dots are shown based on the value
+	 */
 	get value() {
 		return parseInt(this.element.dataset.value);
 	}
@@ -36,6 +43,12 @@ export default class Die {
 				: (dot.style.opacity = 0);
 		});
 	}
+	/**
+	 * if die-object is not locked, set a new random value
+	 *
+	 * @returns {Number} - die value
+	 * @see {@link Die.value}
+	 */
 	roll() {
 		if (!this.isLocked) this.value = Math.ceil(Math.random() * 6);
 		return this.value;
