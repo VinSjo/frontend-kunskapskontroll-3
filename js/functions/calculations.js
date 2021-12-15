@@ -50,10 +50,8 @@ function getOccurrences(diceValues) {
 function calculateDiceScore(diceValues) {
 	const occ = getOccurrences(diceValues);
 	function getSameNumber(minCount) {
-		console.log('occ: ' + occ);
 		const max = Math.max(...occ);
 		const num = max < minCount ? 0 : occ.indexOf(max) + 1;
-		console.log('max: ' + max, 'minCount: ' + minCount, 'num: ' + num);
 		return num;
 	}
 	function getStraight(first) {
