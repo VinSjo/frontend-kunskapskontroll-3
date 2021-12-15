@@ -1,8 +1,13 @@
 import Player from './Player.js';
+import Die from './Die.js';
+import ScoreTableCell from './ScoreTableCell.js';
 import { getMaxDiceScore } from '../functions/calculations.js';
 
 /**
- * A subclass of Player that adds methods used to automate gameplay
+ * A subclass of Player that adds some sketchy methods used to automate gameplay
+ * Doesn't have include the logic needed to "lock" the dice, so should be pretty
+ * easy to beat
+ *
  * @see {@link Player}
  */
 export default class AiPlayer extends Player {
@@ -11,6 +16,9 @@ export default class AiPlayer extends Player {
 	 * @param {String} name
 	 * @param {PlayerScoreCell[]} tableColumn
 	 * @param {Die[]} dice
+	 *
+	 * @see {@link ScoreTableCell}
+	 * @see {@link Die}
 	 */
 	constructor(id, name, tableColumn, dice) {
 		super(id, name, tableColumn, dice);
@@ -33,6 +41,16 @@ export default class AiPlayer extends Player {
 		};
 	}
 
+	/**
+	 * Compares each available cell in players column and returns the one that
+	 * will result in the highest score compared to the maximum possible score
+	 * If no cells are available it returns the cell that has the lowest maximum
+	 * score, which will be "crossed" out
+	 *
+	 * @returns {ScoreTableCell} - returns the cell that should be the best choice
+	 * to maximize score
+	 * @see {@link ScoreTableCell}
+	 */
 	getBestOption() {
 		const score = this.scoreData;
 		const cells = !score.options.length
@@ -56,6 +74,8 @@ export default class AiPlayer extends Player {
 	 * @param {Function} onRollClick - callback to simulate click on rollbutton
 	 * @param {Function} onCellSelect - callback to simulate click on cell in
 	 * scoreTable
+	 * @param {Number} [selectTimeout] - timeout used to limit the speed,
+	 * default is 500
 	 */
 	async automateTurn(onRollClick, onCellSelect, selectTimeout = 500) {
 		await onRollClick();

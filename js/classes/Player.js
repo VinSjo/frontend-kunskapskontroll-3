@@ -11,6 +11,9 @@ export default class Player {
 	 * @param {String} name
 	 * @param {ScoreTableCell[]} tableColumn
 	 * @param {Die[]} dice
+	 *
+	 * @see {@link ScoreTableCell}
+	 * @see {@link Die}
 	 */
 	constructor(id, name, tableColumn, dice) {
 		this.id = id;
@@ -20,10 +23,6 @@ export default class Player {
 		this.dice = dice;
 		this.type = 'human';
 		this.isRolling = false;
-		/**
-		 * @param {ScoreTableCell[]} section
-		 * @returns {Number}
-		 */
 		const reduceSection = section => {
 			return section.reduce((sum, cell) => {
 				const val = cell.value;
@@ -116,7 +115,14 @@ export default class Player {
 		return this.dice.map(die => die.roll());
 	}
 	/**
-	 * @param {Function} [onCellSelect]
+	 * Animate roll of dice, async in order to be able to wait for it to finish
+	 *
+	 * @param {Function} [onCellSelect] - callback used in eventlistener added to
+	 * cells in scoreTable
+	 *
+	 * @see {@link Die}
+	 * @see {@link Player.dice}
+	 * @see {@link Player.column}
 	 */
 	async animatedRoll(onCellSelect = null, interval = 60, timeout = 500) {
 		const dice = this.dice.filter(die => !die.isLocked);
