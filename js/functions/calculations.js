@@ -50,8 +50,10 @@ function getOccurrences(diceValues) {
 function calculateDiceScore(diceValues) {
 	const occ = getOccurrences(diceValues);
 	function getSameNumber(minCount) {
+		console.log('occ: ' + occ);
 		const max = Math.max(...occ);
 		const num = max < minCount ? 0 : occ.indexOf(max) + 1;
+		console.log('max: ' + max, 'minCount: ' + minCount, 'num: ' + num);
 		return num;
 	}
 	function getStraight(first) {
@@ -70,8 +72,8 @@ function calculateDiceScore(diceValues) {
 	score.four = occ[3] * 4;
 	score.five = occ[4] * 5;
 	score.six = occ[5] * 6;
-	score.smallStraight = getStraight(diceValues, 1);
-	score.largeStraight = getStraight(diceValues, 2);
+	score.smallStraight = getStraight(1);
+	score.largeStraight = getStraight(2);
 	score.chance = diceValues.reduce((sum, value) => sum + value, 0);
 	if (Math.max(...occ) < 2) return score;
 	const pairs = [];
@@ -83,8 +85,8 @@ function calculateDiceScore(diceValues) {
 	});
 
 	score.pair = Math.max(...pairs) * 2;
-	score.threeOfKind = getSameNumber(occ, 3) * 3;
-	score.fourOfKind = getSameNumber(occ, 4) * 4;
+	score.threeOfKind = getSameNumber(3) * 3;
+	score.fourOfKind = getSameNumber(4) * 4;
 	score.yatzy = Math.max(...occ) === 5 ? 50 : 0;
 
 	if (pairs.length > 1) {
