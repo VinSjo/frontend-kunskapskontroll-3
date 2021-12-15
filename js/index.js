@@ -1,3 +1,8 @@
+/*
+This file is the entry-point to the program, which imports everything needed
+and activates event-listeners that handles the game-flow
+*/
+
 import UI from './setup/ui.js';
 import { GAME, DICE, START_FORM } from './setup/setup.js';
 import ScoreTableCell from './classes/ScoreTableCell.js';
@@ -7,7 +12,8 @@ import Die from './classes/Die.js';
 
 START_FORM.addFieldset();
 
-//#region EVENT LISTENERS - HANDLES INTERACTION AND STARTS THE GAME
+//#region EVENT LISTENERS
+
 UI.buttons.form.addField.addEventListener('click', () => {
 	START_FORM.addFieldset();
 });
@@ -53,13 +59,18 @@ UI.startForm.form.addEventListener('submit', ev => {
 
 DICE.forEach(die => {
 	die.element.addEventListener('click', () => {
-		onDieClick(die);
+		if (die.element.classList.contains('disabled')) return;
+		die.isLocked = !die.isLocked;
+		const unlockedDice = DICE.filter(die => !die.unlocked).length;
+		UI.buttons.roll.disabled =
+			unlockedDice === 0 || GAME.currentPlayer.rollsLeft < 1;
 	});
 });
 
 //#endregion
 
-//#region FUNCTIONS - HANDLES GAME FLOW
+//#region FUNCTIONS
+
 function resetDice() {
 	DICE.forEach(die => {
 		die.isLocked = false;
@@ -71,15 +82,28 @@ function updateRollsLeftText() {
 	UI.rollsLeftText.textContent = `Rolls left: ${GAME.currentPlayer.rollsLeft}`;
 }
 
+/**
+ * Called when player is changed
+ *
+ * async because AiPlayer.automateTurn is async in order to enable animations
+ * and limit the speed
+ * @see {@link AiPlayer.automateTurn}
+ */
 async function updateCurrentPlayer() {
 	const player = GAME.currentPlayer;
 	player.setCurrent();
 	UI.currentPlayerText.textContent = `Current: ${player.name}`;
 	if (player.type !== 'human') {
-		await player.automateTurn(onRollClick, onCellSelect, onDieClick);
+		await player.automateTurn(onRollClick, onCellSelect);
 	}
 }
 
+/**
+ * Update state of dice based on rollsLeft and if GAME.finished is true
+ *
+ * @see {@link Die.isLocked}
+ * @see {@link GAME.finished}
+ */
 function updateDiceState() {
 	const player = GAME.currentPlayer;
 	const gameOver = GAME.finished;
@@ -93,6 +117,15 @@ function updateDiceState() {
 	});
 }
 
+/**
+ * Function that runs when roll-button is clicked, or as a callback when
+ * AiPlayer.automateTurn runs
+ *
+ * async in order to wait for Player.animatedRoll to complete
+ *
+ * @see {@link Player.animatedRoll}
+ * @see {@link AiPlayer.automateTurn}
+ */
 async function onRollClick() {
 	const unlockedDice = DICE.filter(die => !die.isLocked);
 	if (GAME.finished || !unlockedDice.length) return;
@@ -105,17 +138,13 @@ async function onRollClick() {
 }
 
 /**
- * @param {Die} die
- */
-function onDieClick(die) {
-	if (die.element.classList.contains('disabled')) return;
-	die.isLocked = !die.isLocked;
-	const unlockedDice = DICE.filter(die => !die.unlocked).length;
-	UI.buttons.roll.disabled =
-		unlockedDice === 0 || GAME.currentPlayer.rollsLeft < 1;
-}
-/**
+ * Function that runs when player selects a cell in score-table
+ *
  * @param {Player} player
+ *
+ * @see {@link Player}
+ * @see {@link ScoreTableCell}
+ * @see {@link UI.scoreTable}
  */
 function onCellSelect(player) {
 	player.rollsLeft = 3;

@@ -51,18 +51,13 @@ export default class AiPlayer extends Player {
 	}
 
 	/**
+	 * Auto-play a turn
 	 *
-	 *
-	 * @param {Function} onRollClick
-	 * @param {Function} onDieClick
-	 * @param {Function} onCellSelect
+	 * @param {Function} onRollClick - callback to simulate click on rollbutton
+	 * @param {Function} onCellSelect - callback to simulate click on cell in
+	 * scoreTable
 	 */
-	async automateTurn(
-		onRollClick,
-		onCellSelect,
-		onDieClick,
-		selectTimeout = 500
-	) {
+	async automateTurn(onRollClick, onCellSelect, selectTimeout = 500) {
 		await onRollClick();
 		const score = this.scoreData;
 		const selectedCell = this.getBestOption();
